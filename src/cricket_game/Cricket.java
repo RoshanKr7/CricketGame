@@ -1,42 +1,22 @@
 package cricket_game;
 
-import java.util.Scanner;
+
+import com.tekion.cricket.util.Constants;
+import com.tekion.cricket.util.CricketUtility;
+import com.tekion.cricket.util.StartInnings;
+
+import java.util.*;
 import java.util.logging.Logger;
-import java.util.Random;
 
 class Cricket {
-    static String[] player = new String[2];
-    private static Random rand = new Random();
+    private static Random random = new Random();
     private static Scanner scanner = new Scanner(System.in);
-    public static void wait(int ms)
-    {
-        try
-        {
-            Thread.sleep(ms);
-        }
-        catch(InterruptedException ex)
-        {
-            Thread.currentThread().interrupt();
-        }
-    }
 
-    private static void result(int scoreTeam1, int scoreTeam2, int wicketFallen, int numberOfBalls, int ballsThrown){
-        if(scoreTeam1 > scoreTeam2){
-            System.out.println("Team " + player[0] +" has won the Match by " + (scoreTeam1-scoreTeam2) + " Runs.");
-        }
-        else if(scoreTeam1 < scoreTeam2){
-            System.out.println("Team "+ player[1] +" has won the Match by " + (10-wicketFallen) + " Wickets and " + (numberOfBalls-ballsThrown) + " Balls.");
-        }
-        else{
-            System.out.println("!!Draw!!");
-        }
-    }
-
-    private static int toss(String[] playerName){
+    private static int toss(List<String> playerName){
         Logger logger = Logger.getLogger(Cricket.class.getName());
-        int tossResult = rand.nextInt(2);
+        int tossResult = random.nextInt(2);
         int choice = 0;
-        logger.info("Team " + playerName[tossResult] + " Won the Toss");
+        logger.info("Team " + playerName.get(tossResult) + " Won the Toss");
         while(true){
             System.out.println("Press 0 for Bat First \nPress 1 for Field First");
             choice = scanner.nextInt();
@@ -50,53 +30,32 @@ class Cricket {
         return (choice ^ tossResult);
     }
 
-    public static void main(String[] args){
-        ScoreBoard battingFirst = new ScoreBoard();
-        ScoreBoard battingSecond = new ScoreBoard();
-        StartInning startInning = new StartInning();
+    public static void main(String[] args) throws InterruptedException {
         Logger logger = Logger.getLogger(Cricket.class.getName());
+        List<String> playerName = new ArrayList<>();
 
-        String[] playerName = new String[2];
         logger.info("Enter Player 1 Name : ");
-        playerName[0] = scanner.next();
+        playerName.add(scanner.next());
         logger.info("Enter Player 2 Name : ");
-        playerName[1] = scanner.next();
+        playerName.add(scanner.next());
 
         int battingFirstTeam = toss(playerName);
 
         if(battingFirstTeam==1){
-            player[0] = playerName[1];
-            player[1] = playerName[0];
-        }
-        else{
-            player[0] = playerName[0];
-            player[1] = playerName[1];
+            Collections.swap(playerName, 0, 1);
         }
 
         logger.info("No. of Overs in the Match : ");
         int overs = scanner.nextInt();
-        battingFirst.setNumberOfBalls(overs);
-        battingSecond.setNumberOfBalls(overs);
-        int wickets = 10;
 
-        System.out.println("Team " + player[0] + " is going to start their innings");
-        wait(3000);
-        startInning.startFirstInning(battingFirst, wickets);
+        ScoreBoard scoreBoardTeam1 =  StartInnings.startFirstInning(playerName.get(0), overs* Constants.BALL_IN_OVER);
 
-        System.out.println("Team " + player[0] + " Innings Over \n" + "Final Score : " + battingFirst.getTeamScore() +"/" + battingFirst.getWicketFallen());
-        wait(2000);
         System.out.println();
 
-        System.out.println("Team " + player[1] + " is going to start their innings");
-        wait(3000);
-        startInning.startSecondInning(battingFirst, battingSecond, wickets);
+        ScoreBoard scoreBoardTeam2 = StartInnings.startSecondInning(playerName.get(1), scoreBoardTeam1, overs*Constants.BALL_IN_OVER);
 
-
-        System.out.println("Team " + player[1] + " Innings Over \n" + "Final Score : " + battingSecond.getTeamScore() +"/" + battingSecond.getWicketFallen());
-        wait(2000);
         System.out.println();
 
-        result(battingFirst.getTeamScore(), battingSecond.getTeamScore(), battingSecond.getWicketFallen(), battingSecond.getNumberOfBalls(), battingSecond.getBallsThrown());
-
+        CricketUtility.result(scoreBoardTeam1, scoreBoardTeam2);
     }
 }

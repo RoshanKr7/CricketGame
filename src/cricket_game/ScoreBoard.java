@@ -1,49 +1,82 @@
 package cricket_game;
 
-public class ScoreBoard {
-    private int numberOfBalls = 0;
-    private int partnerships = 0;
-    private int wicketFallen = 0;
-    private int ballsThrown = 0;
-    private int teamScore = 0;
+import lombok.Data;
 
-    public void setNumberOfBalls(int overs){
-        numberOfBalls = overs * 6;
+import java.util.List;
+
+@Data
+
+public class ScoreBoard {
+
+    private String teamName;
+    private int numberOfBalls;
+    private int partnerships;
+    private int wicketFallen;
+    private int ballsThrown;
+    private int teamScore;
+
+    public String getTeamName() {
+        return teamName;
     }
 
-    public int getNumberOfBalls(){
+    public int getNumberOfBalls() {
         return numberOfBalls;
     }
 
-    public void setPartnerships(int val){
-        partnerships += val;
-    }
-
-    public int getPartnerships(){
+    public int getPartnerships() {
         return partnerships;
     }
 
-    public void setWicketFallen(){
-        wicketFallen += 1;
-    }
-
-    public int getWicketFallen(){
+    public int getWicketFallen() {
         return wicketFallen;
     }
 
-    public void setBallsThrown(){
-        ballsThrown += 1;
-    }
-
-    public int getBallsThrown(){
+    public int getBallsThrown() {
         return ballsThrown;
     }
 
-    public void setTeamScore(int val){
-        teamScore += val;
-    }
-
-    public int getTeamScore(){
+    public int getTeamScore() {
         return teamScore;
     }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public void setNumberOfBalls(int numberOfBalls) {
+        this.numberOfBalls = numberOfBalls;
+    }
+
+    public void setPartnerships(int partnerships) {
+        this.partnerships = partnerships;
+    }
+
+    public void setWicketFallen(int wicketFallen) {
+        this.wicketFallen = wicketFallen;
+    }
+
+    public void setBallsThrown(int ballsThrown) {
+        this.ballsThrown = ballsThrown;
+    }
+
+    public void setTeamScore(int teamScore) {
+        this.teamScore = teamScore;
+    }
+
+    public void updatePartnerships(int score){
+        partnerships += score;
+    }
+
+    public void updateWicketFallen(){
+        wicketFallen += 1;
+    }
+
+    public void updateBallsThrown(){
+        ballsThrown += 1;
+    }
+
+    public void updateTeamScore(int score){
+        teamScore += score;
+    }
+
 }
