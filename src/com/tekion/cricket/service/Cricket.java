@@ -1,6 +1,7 @@
-package cricket_game;
+package com.tekion.cricket.service;
 
 
+import com.tekion.cricket.repo.ScoreBoard;
 import com.tekion.cricket.util.Constants;
 import com.tekion.cricket.util.CricketUtility;
 import com.tekion.cricket.util.StartInnings;
@@ -45,8 +46,16 @@ class Cricket {
             Collections.swap(playerName, 0, 1);
         }
 
-        logger.info("No. of Overs in the Match : ");
-        int overs = scanner.nextInt();
+        int overs;
+        while(true){
+            logger.info("No. of Overs in the Match : ");
+            overs = scanner.nextInt();
+            if(overs > 0){
+                break;
+            }
+            logger.info("Please Enter a valid number greater than 0");
+        }
+
 
         ScoreBoard scoreBoardTeam1 =  StartInnings.startFirstInning(playerName.get(0), overs* Constants.BALL_IN_OVER);
 

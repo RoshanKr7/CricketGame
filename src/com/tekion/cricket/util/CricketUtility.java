@@ -1,7 +1,7 @@
 package com.tekion.cricket.util;
 
 
-import cricket_game.ScoreBoard;
+import com.tekion.cricket.repo.ScoreBoard;
 
 import java.util.ArrayList;
 import java.util.List;

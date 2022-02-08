@@ -1,7 +1,8 @@
-package cricket_game;
+package com.tekion.cricket.repo;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -10,7 +11,7 @@ public class ScoreBoard {
 
     private String teamName;
     private int numberOfBalls;
-    private int partnerships;
+    private List<Integer> partnerships = new ArrayList<>();
     private int wicketFallen;
     private int ballsThrown;
     private int teamScore;
@@ -24,7 +25,7 @@ public class ScoreBoard {
     }
 
     public int getPartnerships() {
-        return partnerships;
+        return partnerships.get(wicketFallen-1);
     }
 
     public int getWicketFallen() {
@@ -47,24 +48,12 @@ public class ScoreBoard {
         this.numberOfBalls = numberOfBalls;
     }
 
-    public void setPartnerships(int partnerships) {
-        this.partnerships = partnerships;
-    }
-
-    public void setWicketFallen(int wicketFallen) {
-        this.wicketFallen = wicketFallen;
-    }
-
-    public void setBallsThrown(int ballsThrown) {
-        this.ballsThrown = ballsThrown;
-    }
-
-    public void setTeamScore(int teamScore) {
-        this.teamScore = teamScore;
+    public void setPartnerships(){
+        partnerships.add(0);
     }
 
     public void updatePartnerships(int score){
-        partnerships += score;
+        partnerships.set(wicketFallen, partnerships.get(wicketFallen)+score);
     }
 
     public void updateWicketFallen(){

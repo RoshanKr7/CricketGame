@@ -1,6 +1,6 @@
 package com.tekion.cricket.util;
 
-import cricket_game.ScoreBoard;
+import com.tekion.cricket.repo.ScoreBoard;
 
 public class StartInnings {
     public static ScoreBoard startFirstInning(String teamName, int numberOfBalls){
@@ -10,6 +10,7 @@ public class StartInnings {
         scoreBoard.setNumberOfBalls(numberOfBalls);
         System.out.println("Team " + teamName + " is going to start their innings");
         CricketUtility.wait(3000);
+        scoreBoard.setPartnerships();
         while(scoreBoard.getWicketFallen() < Constants.WICKETS && scoreBoard.getBallsThrown() < scoreBoard.getNumberOfBalls()){
             scoreBoard.updateBallsThrown();
             int score;
@@ -19,6 +20,7 @@ public class StartInnings {
                 System.out.println("Wicket Number " + scoreBoard.getWicketFallen() + " has Fallen");
                 System.out.println("Partnership for Wicket "+ scoreBoard.getWicketFallen()+ " is " + scoreBoard.getPartnerships());
                 CricketUtility.wait(2000);
+                scoreBoard.setPartnerships();
             }
             else{
                 scoreBoard.updatePartnerships(score);
@@ -41,6 +43,7 @@ public class StartInnings {
         scoreBoard.setNumberOfBalls(numberOfBalls);
         System.out.println("Team " + teamName + " is going to start their innings");
         CricketUtility.wait(3000);
+        scoreBoard.setPartnerships();
         while(scoreBoard.getWicketFallen() < Constants.WICKETS && scoreBoard.getBallsThrown() < scoreBoard.getNumberOfBalls()){
             scoreBoard.updateBallsThrown();
             int score;
@@ -50,6 +53,7 @@ public class StartInnings {
                 System.out.println("Wicket Number " + scoreBoard.getWicketFallen() + " has Fallen");
                 System.out.println("Partnership for Wicket "+ scoreBoard.getWicketFallen()+ " is " + scoreBoard.getPartnerships());
                 CricketUtility.wait(2000);
+                scoreBoard.setPartnerships();
             }
             else{
                 scoreBoard.updatePartnerships(score);
