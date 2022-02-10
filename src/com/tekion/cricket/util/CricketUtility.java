@@ -1,18 +1,19 @@
 package com.tekion.cricket.util;
 
-import com.tekion.cricket.repo.ScoreBoard;
+import com.tekion.cricket.bean.ScoreBoard;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class CricketUtility {
   private static Random random = new Random();
+  private static final String TEAM_ONE_WON_STRING = "Team %s has won the match by %d Runs";
+  private static final String TEAM_TWO_WON_STRING = "Team %s has won the match by %d Wickets and %d Balls";
 
-  public static int scoreGenerator(List<Integer> scoreChances) {
-    int utility = random.nextInt(106);
+  public static int scoreGenerator(List<Integer> scoreChances, int MaximumNumber) {
+    int randomNumber = random.nextInt(MaximumNumber+1);
     int score = 0;
-    while (scoreChances.get(score) < utility) {
+    while (scoreChances.get(score) < randomNumber) {
       score++;
     }
     return score;
@@ -26,25 +27,21 @@ public class CricketUtility {
     }
   }
 
-  public static void result(ScoreBoard scoreboardTeam1, ScoreBoard scoreboardTeam2) {
-    if (scoreboardTeam1.getTeamScore() > scoreboardTeam2.getTeamScore()) {
-      System.out.println(
-          "Team "
-              + scoreboardTeam1.getTeamName()
-              + " has won the Match by "
-              + (scoreboardTeam1.getTeamScore() - scoreboardTeam2.getTeamScore())
-              + " Runs.");
-    } else if (scoreboardTeam1.getTeamScore() < scoreboardTeam2.getTeamScore()) {
-      System.out.println(
-          "Team "
-              + scoreboardTeam2.getTeamName()
-              + " has won the Match by "
-              + (10 - scoreboardTeam2.getWicketFallen())
-              + " Wickets and "
-              + (scoreboardTeam2.getNumberOfBalls() - scoreboardTeam2.getBallsThrown())
-              + " Balls.");
+  public static void result(ScoreBoard scoreBoardTeam1, ScoreBoard scoreBoardTeam2) {
+    if (scoreBoardTeam1.getTeamScore() > scoreBoardTeam2.getTeamScore()) {
+      System.out.println(getTeamOneWonString(scoreBoardTeam1, scoreBoardTeam2));
+    } else if (scoreBoardTeam1.getTeamScore() < scoreBoardTeam2.getTeamScore()) {
+      System.out.println(getTeamTwoWonString(scoreBoardTeam2));
     } else {
       System.out.println("!!Draw!!");
     }
+  }
+
+  private static String getTeamOneWonString(ScoreBoard scoreBoardTeam1, ScoreBoard scoreBoardTeam2){
+    return String.format(TEAM_ONE_WON_STRING, scoreBoardTeam1.getTeamName(), scoreBoardTeam1.getTeamScore() - scoreBoardTeam2.getTeamScore());
+  }
+
+  private static String getTeamTwoWonString(ScoreBoard scoreBoardTeam2){
+    return String.format(TEAM_TWO_WON_STRING, scoreBoardTeam2.getTeamName(), (10-scoreBoardTeam2.getWicketFallen()), scoreBoardTeam2.getNumberOfBalls() - scoreBoardTeam2.getBallsThrown());
   }
 }
