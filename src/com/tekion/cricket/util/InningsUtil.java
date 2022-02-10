@@ -17,9 +17,10 @@ public class InningsUtil {
 
   private static List<Integer> scoreChances;
 
-  public static ScoreBoard startFirstInning(Match match, TeamDetails battingTeam, TeamDetails bowlingTeam) {
+  public static ScoreBoard startFirstInning(Match match) {
     ScoreBoard scoreBoard = new ScoreBoard();
     Map <Integer, String> balls = new HashMap<>();
+    TeamDetails battingTeam = match.getBattingFirstTeam();
     initialiseScoreboard(scoreBoard, battingTeam.getTeamName());
 
     System.out.println(String.format(INNINGS_START_STRING, battingTeam.getTeamName()));
@@ -34,9 +35,10 @@ public class InningsUtil {
     return scoreBoard;
   }
 
-  public static ScoreBoard startSecondInning(Match match, TeamDetails battingTeam, TeamDetails bowlingTeam, ScoreBoard scoreBoardTeam1){
+  public static ScoreBoard startSecondInning(Match match, ScoreBoard scoreBoardTeam1){
     ScoreBoard scoreBoard = new ScoreBoard();
     Map <Integer, String> balls = new HashMap<>();
+    TeamDetails battingTeam = match.getBowlingFirstTeam();
     initialiseScoreboard(scoreBoard, battingTeam.getTeamName());
 
     System.out.println(String.format(INNINGS_START_STRING, battingTeam.getTeamName()));

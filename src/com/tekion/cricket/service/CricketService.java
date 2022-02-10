@@ -21,9 +21,11 @@ class CricketService {
     Match match = new Match();
     logger.info("Enter Team 1 Details : ");
     TeamDetails teamOneDetails = initialiseTeam();
+    match.setTeamOneName(teamOneDetails.getTeamName());
 
     logger.info("Enter Player 2 Name : ");
     TeamDetails teamTwoDetails = initialiseTeam();
+    match.setTeamTwoName(teamTwoDetails.getTeamName());
 
     match.setNumberOfOvers(getNumberOfOvers());
 
@@ -32,9 +34,9 @@ class CricketService {
 
     chooseBatOrField(teamOneDetails, teamTwoDetails, match);
 
-    ScoreBoard scoreBoardTeam1 = InningsUtil.startFirstInning(match, match.getBattingFirstTeam(), match.getBowlingFirstTeam());
+    ScoreBoard scoreBoardTeam1 = InningsUtil.startFirstInning(match);
 
-    ScoreBoard scoreBoardTeam2 = InningsUtil.startSecondInning(match, match.getBowlingFirstTeam(), match.getBattingFirstTeam(), scoreBoardTeam1);
+    ScoreBoard scoreBoardTeam2 = InningsUtil.startSecondInning(match, scoreBoardTeam1);
 
     CricketUtility.result(scoreBoardTeam1, scoreBoardTeam2);
   }
