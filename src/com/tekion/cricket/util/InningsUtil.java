@@ -19,7 +19,7 @@ public class InningsUtil {
 
   public static ScoreBoard startFirstInning(Match match, TeamDetails battingTeam, TeamDetails bowlingTeam) {
     ScoreBoard scoreBoard = new ScoreBoard();
-    Map <Integer, Integer> balls = new HashMap<>();
+    Map <Integer, String> balls = new HashMap<>();
     initialiseScoreboard(scoreBoard, battingTeam.getTeamName());
 
     System.out.println(String.format(INNINGS_START_STRING, battingTeam.getTeamName()));
@@ -36,7 +36,7 @@ public class InningsUtil {
 
   public static ScoreBoard startSecondInning(Match match, TeamDetails battingTeam, TeamDetails bowlingTeam, ScoreBoard scoreBoardTeam1){
     ScoreBoard scoreBoard = new ScoreBoard();
-    Map <Integer, Integer> balls = new HashMap<>();
+    Map <Integer, String> balls = new HashMap<>();
     initialiseScoreboard(scoreBoard, battingTeam.getTeamName());
 
     System.out.println(String.format(INNINGS_START_STRING, battingTeam.getTeamName()));
@@ -67,16 +67,18 @@ public class InningsUtil {
     return scoreChances;
   }
 
-  private static void updateScoreBoardForEachBall(ScoreBoard scoreBoard, Map<Integer, Integer> balls){
-    int score;
+  private static void updateScoreBoardForEachBall(ScoreBoard scoreBoard, Map<Integer, String> balls){
+    Integer score;
     score = CricketUtility.scoreGenerator(scoreChances, scoreChances.get(scoreChances.size() - 1));
-    balls.put(balls.size(), score);
+
     if (score == Constants.CONSTANT_FOR_OUT) {
       addWicketFallen(scoreBoard);
       System.out.println(getPartnershipBrokenString(scoreBoard));
       startNewPartnership(scoreBoard);
+      balls.put(balls.size(), "W");
       CricketUtility.waitForMilliSec(2000);
     } else {
+      balls.put(balls.size(), score.toString());
       AddScoreToPartnerships(scoreBoard, score);
       updateTeamScore(scoreBoard, score);
     }
@@ -103,7 +105,7 @@ public class InningsUtil {
     scoreBoard.partnerships.set(scoreBoard.getWicketFallen(), scoreBoard.partnerships.get(scoreBoard.getWicketFallen()) + score);
   }
 
-  private static void incrementOver(ScoreBoard scoreBoard,Map<Integer, Integer> balls){
+  private static void incrementOver(ScoreBoard scoreBoard,Map<Integer, String> balls){
     scoreBoard.overs.add(balls);
     scoreBoard.setOversThrown(scoreBoard.getOversThrown() + 1);
   }
