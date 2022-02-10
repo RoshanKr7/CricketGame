@@ -1,9 +1,13 @@
 package com.tekion.cricket.util;
 
+import com.tekion.cricket.bean.Match;
 import com.tekion.cricket.bean.ScoreBoard;
+import com.tekion.cricket.bean.TeamDetails;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InningsUtil {
   private static final String INNINGS_START_STRING = "Team %s is going to start their innings";
@@ -13,41 +17,40 @@ public class InningsUtil {
 
   private static List<Integer> scoreChances;
 
-  public static ScoreBoard startFirstInning(String teamName, int numberOfBalls) {
+  public static ScoreBoard startFirstInning(Match match, TeamDetails battingTeam, TeamDetails bowlingTeam) {
     ScoreBoard scoreBoard = new ScoreBoard();
+    Map <Integer, Integer> balls = new HashMap<>();
+    initialiseScoreboard(scoreBoard, battingTeam.getTeamName());
 
-    scoreBoard.setTeamName(teamName);
-    scoreBoard.setNumberOfBalls(numberOfBalls);
-    System.out.println(String.format(INNINGS_START_STRING, teamName));
-    CricketUtility.wait(3000);
+    System.out.println(String.format(INNINGS_START_STRING, battingTeam.getTeamName()));
     scoreChances = makeScoreChances();
-    while (scoreBoard.getWicketFallen() < Constants.NUMBER_WICKETS && scoreBoard.getBallsThrown() < scoreBoard.getNumberOfBalls()) {
-      updateScoreBoardForEachBall(scoreBoard);
+
+    startNewPartnership(scoreBoard);
+    while(scoreBoard.getWicketFallen() < Constants.NUMBER_WICKETS && scoreBoard.getOversThrown() < match.getNumberOfOvers()){
+      updateScoreBoardForEachBall(scoreBoard, balls);
     }
+
     System.out.println(getInningsOverString(scoreBoard));
-    CricketUtility.wait(2000);
     return scoreBoard;
   }
 
-  public static ScoreBoard startSecondInning(
-      String teamName, ScoreBoard scoreBoardTeam1, int numberOfBalls) throws InterruptedException {
+  public static ScoreBoard startSecondInning(Match match, TeamDetails battingTeam, TeamDetails bowlingTeam, ScoreBoard scoreBoardTeam1){
     ScoreBoard scoreBoard = new ScoreBoard();
+    Map <Integer, Integer> balls = new HashMap<>();
+    initialiseScoreboard(scoreBoard, battingTeam.getTeamName());
 
-    scoreBoard.setTeamName(teamName);
-    scoreBoard.setNumberOfBalls(numberOfBalls);
-    System.out.println(String.format(INNINGS_START_STRING, teamName));
-    CricketUtility.wait(3000);
+    System.out.println(String.format(INNINGS_START_STRING, battingTeam.getTeamName()));
     scoreChances = makeScoreChances();
 
-    while (scoreBoard.getWicketFallen() < Constants.NUMBER_WICKETS && scoreBoard.getBallsThrown() < scoreBoard.getNumberOfBalls()) {
-      updateScoreBoardForEachBall(scoreBoard);
+    startNewPartnership(scoreBoard);
+    while(scoreBoard.getWicketFallen() < Constants.NUMBER_WICKETS && scoreBoard.getOversThrown() < match.getNumberOfOvers()){
+      updateScoreBoardForEachBall(scoreBoard, balls);
       if (scoreBoard.getTeamScore() > scoreBoardTeam1.getTeamScore()) {
-          break;
+        break;
       }
     }
 
     System.out.println(getInningsOverString(scoreBoard));
-    CricketUtility.wait(2000);
     return scoreBoard;
   }
 
@@ -64,40 +67,45 @@ public class InningsUtil {
     return scoreChances;
   }
 
-  private static void updateScoreBoardForEachBall(ScoreBoard scoreBoard){
-    updateBallsThrown(scoreBoard);
+  private static void updateScoreBoardForEachBall(ScoreBoard scoreBoard, Map<Integer, Integer> balls){
     int score;
     score = CricketUtility.scoreGenerator(scoreChances, scoreChances.get(scoreChances.size() - 1));
+    balls.put(balls.size(), score);
     if (score == Constants.CONSTANT_FOR_OUT) {
       addWicketFallen(scoreBoard);
       System.out.println(getPartnershipBrokenString(scoreBoard));
-      CricketUtility.wait(2000);
+      startNewPartnership(scoreBoard);
+      CricketUtility.waitForMilliSec(2000);
     } else {
-      updatePartnerships(scoreBoard, score);
+      AddScoreToPartnerships(scoreBoard, score);
       updateTeamScore(scoreBoard, score);
     }
-    if ((scoreBoard.getBallsThrown() % Constants.NUMBER_OF_BALL_IN_OVER) == 0) {
+    if(balls.size() == Constants.NUMBER_OF_BALL_IN_OVER){
+      incrementOver(scoreBoard, balls);
+      balls.clear();
       System.out.println(getAfterEachOverString(scoreBoard));
-      CricketUtility.wait(1000);
     }
+  }
+
+  private static void initialiseScoreboard(ScoreBoard scoreBoard, String teamName){
+    scoreBoard.setTeamName(teamName);
   }
 
   private static void addWicketFallen(ScoreBoard scoreBoard){
     scoreBoard.setWicketFallen(scoreBoard.getWicketFallen() + 1);
   }
 
-  private static void updatePartnerships(ScoreBoard scoreBoard, int score) {
-    if(scoreBoard.partnerships.size() == scoreBoard.getWicketFallen()){
-      scoreBoard.partnerships.add(0);
-    }
-    else{
-      scoreBoard.partnerships.set(scoreBoard.getWicketFallen(), scoreBoard.partnerships.get(scoreBoard.getWicketFallen()) + score);
-    }
-
+  private static void startNewPartnership(ScoreBoard scoreBoard){
+    scoreBoard.partnerships.add(0);
   }
 
-  public static void updateBallsThrown(ScoreBoard scoreBoard) {
-    scoreBoard.setBallsThrown(scoreBoard.getBallsThrown() + 1);
+  private static void AddScoreToPartnerships(ScoreBoard scoreBoard, int score) {
+    scoreBoard.partnerships.set(scoreBoard.getWicketFallen(), scoreBoard.partnerships.get(scoreBoard.getWicketFallen()) + score);
+  }
+
+  private static void incrementOver(ScoreBoard scoreBoard,Map<Integer, Integer> balls){
+    scoreBoard.overs.add(balls);
+    scoreBoard.setOversThrown(scoreBoard.getOversThrown() + 1);
   }
 
   public static void updateTeamScore(ScoreBoard scoreBoard, int score) {
@@ -105,9 +113,6 @@ public class InningsUtil {
   }
 
   private static int currentPartnerships(ScoreBoard scoreBoard){
-    if(scoreBoard.partnerships.size() == scoreBoard.getWicketFallen()){
-      scoreBoard.partnerships.add(0);
-    }
     return scoreBoard.getPartnerships().get(scoreBoard.getWicketFallen()-1);
   }
 
@@ -116,7 +121,7 @@ public class InningsUtil {
   }
 
   private static String getAfterEachOverString(ScoreBoard scoreBoard){
-    return String.format(AFTER_EACH_OVER_STRING, (scoreBoard.getBallsThrown() / Constants.NUMBER_OF_BALL_IN_OVER), scoreBoard.getTeamScore(), scoreBoard.getWicketFallen());
+    return String.format(AFTER_EACH_OVER_STRING, scoreBoard.getOversThrown(), scoreBoard.getTeamScore(), scoreBoard.getWicketFallen());
   }
 
   private static String getInningsOverString(ScoreBoard scoreBoard){

@@ -1,17 +1,20 @@
 package com.tekion.cricket.util;
 
 import com.tekion.cricket.bean.ScoreBoard;
+import lombok.experimental.UtilityClass;
 
 import java.util.List;
 import java.util.Random;
 
+@UtilityClass
+
 public class CricketUtility {
   private static Random random = new Random();
   private static final String TEAM_ONE_WON_STRING = "Team %s has won the match by %d Runs";
-  private static final String TEAM_TWO_WON_STRING = "Team %s has won the match by %d Wickets and %d Balls";
+  private static final String TEAM_TWO_WON_STRING = "Team %s has won the match by %d Wickets";
 
-  public static int scoreGenerator(List<Integer> scoreChances, int MaximumNumber) {
-    int randomNumber = random.nextInt(MaximumNumber+1);
+  public int scoreGenerator(List<Integer> scoreChances, int maximumNumber) {
+    int randomNumber = random.nextInt(maximumNumber+1);
     int score = 0;
     while (scoreChances.get(score) < randomNumber) {
       score++;
@@ -19,7 +22,7 @@ public class CricketUtility {
     return score;
   }
 
-  public static void wait(int ms) {
+  public void waitForMilliSec(int ms) {
     try {
       Thread.sleep(ms);
     } catch (InterruptedException ex) {
@@ -27,7 +30,7 @@ public class CricketUtility {
     }
   }
 
-  public static void result(ScoreBoard scoreBoardTeam1, ScoreBoard scoreBoardTeam2) {
+  public void result(ScoreBoard scoreBoardTeam1, ScoreBoard scoreBoardTeam2) {
     if (scoreBoardTeam1.getTeamScore() > scoreBoardTeam2.getTeamScore()) {
       System.out.println(getTeamOneWonString(scoreBoardTeam1, scoreBoardTeam2));
     } else if (scoreBoardTeam1.getTeamScore() < scoreBoardTeam2.getTeamScore()) {
@@ -37,11 +40,11 @@ public class CricketUtility {
     }
   }
 
-  private static String getTeamOneWonString(ScoreBoard scoreBoardTeam1, ScoreBoard scoreBoardTeam2){
+  private String getTeamOneWonString(ScoreBoard scoreBoardTeam1, ScoreBoard scoreBoardTeam2){
     return String.format(TEAM_ONE_WON_STRING, scoreBoardTeam1.getTeamName(), scoreBoardTeam1.getTeamScore() - scoreBoardTeam2.getTeamScore());
   }
 
-  private static String getTeamTwoWonString(ScoreBoard scoreBoardTeam2){
-    return String.format(TEAM_TWO_WON_STRING, scoreBoardTeam2.getTeamName(), (10-scoreBoardTeam2.getWicketFallen()), scoreBoardTeam2.getNumberOfBalls() - scoreBoardTeam2.getBallsThrown());
+  private String getTeamTwoWonString(ScoreBoard scoreBoardTeam2){
+    return String.format(TEAM_TWO_WON_STRING, scoreBoardTeam2.getTeamName(), (Constants.NUMBER_WICKETS-scoreBoardTeam2.getWicketFallen()));
   }
 }

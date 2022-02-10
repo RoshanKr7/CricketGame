@@ -1,6 +1,9 @@
 package com.tekion.cricket.service;
 
+import com.tekion.cricket.bean.Match;
+import com.tekion.cricket.bean.PlayerDetails;
 import com.tekion.cricket.bean.ScoreBoard;
+import com.tekion.cricket.bean.TeamDetails;
 import com.tekion.cricket.util.Constants;
 import com.tekion.cricket.util.CricketUtility;
 import com.tekion.cricket.util.InningsUtil;
@@ -15,29 +18,49 @@ class CricketService {
   private static final String TOSS_WON_STRING = "Team %s Won the Toss";
 
   public static void main(String[] args) throws InterruptedException {
-    List<String> playerName = new ArrayList<>();
+    Match match = new Match();
+    logger.info("Enter Team 1 Details : ");
+    TeamDetails teamOneDetails = initialiseTeam();
 
-    logger.info("Enter Player 1 Name : ");
-    playerName.add(getTeamName());
     logger.info("Enter Player 2 Name : ");
-    playerName.add(getTeamName());
+    TeamDetails teamTwoDetails = initialiseTeam();
 
-    int overs = getNumberOfOvers();
+    match.setNumberOfOvers(getNumberOfOvers());
 
-    int battingFirstTeam = toss(playerName);
+    match.setTossWinner(toss(teamOneDetails, teamTwoDetails));
+    logger.info(getTossWonString(match.getTossWinner().getTeamName()));
 
-    if (battingFirstTeam == 1) {
-      Collections.swap(playerName, 0, 1);
-    }
+    chooseBatOrField(teamOneDetails, teamTwoDetails, match);
 
-    ScoreBoard scoreBoardTeam1 =
-        InningsUtil.startFirstInning(playerName.get(0), overs * Constants.NUMBER_OF_BALL_IN_OVER);
+    ScoreBoard scoreBoardTeam1 = InningsUtil.startFirstInning(match, match.getBattingFirstTeam(), match.getBowlingFirstTeam());
 
-    ScoreBoard scoreBoardTeam2 = InningsUtil.startSecondInning(
-            playerName.get(1), scoreBoardTeam1, overs * Constants.NUMBER_OF_BALL_IN_OVER);
+    ScoreBoard scoreBoardTeam2 = InningsUtil.startSecondInning(match, match.getBowlingFirstTeam(), match.getBattingFirstTeam(), scoreBoardTeam1);
 
     CricketUtility.result(scoreBoardTeam1, scoreBoardTeam2);
   }
+
+  private static TeamDetails initialiseTeam(){
+    TeamDetails teamDetails = new TeamDetails();
+    System.out.print("Enter team name : ");
+    teamDetails.setTeamName(getTeamName());
+    int numberOfPlayer = 0;
+    List <PlayerDetails> playerDetailsList = new ArrayList<>();
+    while(numberOfPlayer <= Constants.NUMBER_WICKETS){
+      PlayerDetails playerDetails = new PlayerDetails();
+      System.out.println("Enter Player " + (numberOfPlayer+1) + " Detail : ");
+      System.out.print("Name : ");
+      playerDetails.setPlayerName(scanner.next());
+      System.out.print("\nType (Bat/Ball) : ");
+      playerDetails.setPlayerType(scanner.next());
+      System.out.print("\nRating (Out of 10) : ");
+      playerDetails.setPlayerRating(scanner.nextInt());
+      playerDetailsList.add(playerDetails);
+      numberOfPlayer++;
+    }
+    teamDetails.setPlayersDetails(playerDetailsList);
+    return teamDetails;
+  }
+
 
   private static String getTeamName(){
     String teamName;
@@ -66,10 +89,18 @@ class CricketService {
     return overs;
   }
 
-  private static int toss(List<String> playerName) {
+  private static TeamDetails toss(TeamDetails teamOneDetails, TeamDetails teamTwoDetails){
     int tossResult = random.nextInt(2);
-    int battingChoice = 0;
-    logger.info(getTossWonString(playerName, tossResult));
+    if(tossResult == 0){
+      return teamOneDetails;
+    }
+    else{
+      return teamTwoDetails;
+    }
+  }
+
+  private static void chooseBatOrField(TeamDetails teamOneDetails, TeamDetails teamtwoDetails, Match match){
+    int battingChoice;
     while (true) {
       System.out.println("Press 0 for Bat First \nPress 1 for Field First");
       battingChoice = scanner.nextInt();
@@ -79,10 +110,27 @@ class CricketService {
         System.out.println("!! Please Choose a valid input !!");
       }
     }
-    return (battingChoice ^ tossResult);
+    if(battingChoice == 0){
+      match.setBattingFirstTeam(match.getTossWinner());
+      if(match.getTossWinner().equals(teamOneDetails)){
+        match.setBowlingFirstTeam(teamtwoDetails);
+      }
+      else{
+        match.setBowlingFirstTeam(teamOneDetails);
+      }
+    }
+    else{
+      match.setBowlingFirstTeam(match.getTossWinner());
+      if(match.getTossWinner().equals(teamOneDetails)){
+        match.setBattingFirstTeam(teamtwoDetails);
+      }
+      else{
+        match.setBattingFirstTeam(teamOneDetails);
+      }
+    }
   }
 
-  private static String getTossWonString(List<String> playerName, int tossResult){
-    return String.format(TOSS_WON_STRING, playerName.get(tossResult));
+  private static String getTossWonString(String tossWinner){
+    return String.format(TOSS_WON_STRING, tossWinner);
   }
 }
