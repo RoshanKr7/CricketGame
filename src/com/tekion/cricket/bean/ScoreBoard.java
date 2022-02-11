@@ -12,7 +12,7 @@ public class ScoreBoard {
 
   private String teamName;
   public List<Integer> partnerships = new ArrayList<>();
-  public List<Map<Integer, String>> overs = new ArrayList<>();
+  public List<Over> overs;
   private int wicketFallen;
   private int oversThrown;
   private int teamScore;

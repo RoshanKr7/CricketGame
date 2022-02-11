@@ -6,5 +6,6 @@ import lombok.Data;
 public class PlayerDetails {
     String playerName;
     String playerType;
-    int playerRating;
+    int battingRating;
+    int bowlingRating;
 }

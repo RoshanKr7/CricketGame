@@ -1,13 +1,12 @@
 package com.tekion.cricket.util;
 
 import com.tekion.cricket.bean.Match;
+import com.tekion.cricket.bean.Over;
 import com.tekion.cricket.bean.ScoreBoard;
 import com.tekion.cricket.bean.TeamDetails;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class InningsUtil {
   private static final String INNINGS_START_STRING = "Team %s is going to start their innings";
@@ -19,7 +18,7 @@ public class InningsUtil {
 
   public static ScoreBoard startFirstInning(Match match) {
     ScoreBoard scoreBoard = new ScoreBoard();
-    Map <Integer, String> balls = new HashMap<>();
+    Over over = new Over();
     TeamDetails battingTeam = match.getBattingFirstTeam();
     initialiseScoreboard(scoreBoard, battingTeam.getTeamName());
 
@@ -28,7 +27,7 @@ public class InningsUtil {
 
     startNewPartnership(scoreBoard);
     while(scoreBoard.getWicketFallen() < Constants.NUMBER_WICKETS && scoreBoard.getOversThrown() < match.getNumberOfOvers()){
-      updateScoreBoardForEachBall(scoreBoard, balls);
+      updateScoreBoardForEachBall(scoreBoard, over);
     }
 
     System.out.println(getInningsOverString(scoreBoard));
@@ -37,7 +36,7 @@ public class InningsUtil {
 
   public static ScoreBoard startSecondInning(Match match, ScoreBoard scoreBoardTeam1){
     ScoreBoard scoreBoard = new ScoreBoard();
-    Map <Integer, String> balls = new HashMap<>();
+    Over over = new Over();
     TeamDetails battingTeam = match.getBowlingFirstTeam();
     initialiseScoreboard(scoreBoard, battingTeam.getTeamName());
 
@@ -46,7 +45,7 @@ public class InningsUtil {
 
     startNewPartnership(scoreBoard);
     while(scoreBoard.getWicketFallen() < Constants.NUMBER_WICKETS && scoreBoard.getOversThrown() < match.getNumberOfOvers()){
-      updateScoreBoardForEachBall(scoreBoard, balls);
+      updateScoreBoardForEachBall(scoreBoard, over);
       if (scoreBoard.getTeamScore() > scoreBoardTeam1.getTeamScore()) {
         break;
       }
@@ -69,7 +68,7 @@ public class InningsUtil {
     return scoreChances;
   }
 
-  private static void updateScoreBoardForEachBall(ScoreBoard scoreBoard, Map<Integer, String> balls){
+  private static void updateScoreBoardForEachBall(ScoreBoard scoreBoard, Over over){
     Integer score;
     score = CricketUtility.scoreGenerator(scoreChances, scoreChances.get(scoreChances.size() - 1));
 
@@ -77,16 +76,16 @@ public class InningsUtil {
       addWicketFallen(scoreBoard);
       System.out.println(getPartnershipBrokenString(scoreBoard));
       startNewPartnership(scoreBoard);
-      balls.put(balls.size(), "W");
+      over.balls.put(over.balls.size(), "W");
       CricketUtility.waitForMilliSec(2000);
     } else {
-      balls.put(balls.size(), score.toString());
+      over.balls.put(over.balls.size(), score.toString());
       AddScoreToPartnerships(scoreBoard, score);
       updateTeamScore(scoreBoard, score);
     }
-    if(balls.size() == Constants.NUMBER_OF_BALL_IN_OVER){
-      incrementOver(scoreBoard, balls);
-      balls.clear();
+    if(over.balls.size() == Constants.NUMBER_OF_BALL_IN_OVER){
+      incrementOver(scoreBoard, over);
+      over.balls.clear();
       System.out.println(getAfterEachOverString(scoreBoard));
     }
   }
@@ -107,8 +106,8 @@ public class InningsUtil {
     scoreBoard.partnerships.set(scoreBoard.getWicketFallen(), scoreBoard.partnerships.get(scoreBoard.getWicketFallen()) + score);
   }
 
-  private static void incrementOver(ScoreBoard scoreBoard,Map<Integer, String> balls){
-    scoreBoard.overs.add(balls);
+  private static void incrementOver(ScoreBoard scoreBoard,Over over){
+    scoreBoard.overs.add(over);
     scoreBoard.setOversThrown(scoreBoard.getOversThrown() + 1);
   }
 

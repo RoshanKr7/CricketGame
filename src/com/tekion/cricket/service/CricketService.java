@@ -54,8 +54,10 @@ class CricketService {
       playerDetails.setPlayerName(scanner.next());
       System.out.print("\nType (Bat/Ball) : ");
       playerDetails.setPlayerType(scanner.next());
-      System.out.print("\nRating (Out of 10) : ");
-      playerDetails.setPlayerRating(scanner.nextInt());
+      System.out.print("\nBatting Rating (Out of 10) : ");
+      playerDetails.setBattingRating(scanner.nextInt());
+      System.out.print("\nBowling Rating (Out of 10) : ");
+      playerDetails.setBowlingRating(scanner.nextInt());
       playerDetailsList.add(playerDetails);
       numberOfPlayer++;
     }
