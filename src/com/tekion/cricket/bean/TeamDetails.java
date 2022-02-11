@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class TeamDetails {
     private String teamName;
-    List<PlayerDetails> playersDetails;
+    private List<PlayerDetails> playersDetails;
 }

@@ -4,22 +4,24 @@ import com.tekion.cricket.bean.Match;
 import com.tekion.cricket.bean.ScoreBoard;
 import com.tekion.cricket.bean.TeamDetails;
 import com.tekion.cricket.service.ScoreBoardService;
+import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@UtilityClass
 public class InningsUtil {
-  private static final String INNINGS_START_STRING = "Team %s is going to start their innings";
-  private static final String PARTNERSHIP_BROKEN_STRING =  "Wicket Number %1$d has Fallen \n Partnership for Wicket %1$d is %2$d";
-  private static final String AFTER_EACH_OVER_STRING = "After Over %d : %d/%d";
-  private static final String INNINGS_OVER_STRING = "Team %s Innings Over \nFinal Score : %d/%d\n\n";
+  private final String INNINGS_START_STRING = "Team %s is going to start their innings";
+  private final String PARTNERSHIP_BROKEN_STRING =  "Wicket Number %1$d has Fallen \n Partnership for Wicket %1$d is %2$d";
+  private final String AFTER_EACH_OVER_STRING = "After Over %d : %d/%d";
+  private final String INNINGS_OVER_STRING = "Team %s Innings Over \nFinal Score : %d/%d\n\n";
 
-  private static List<Integer> scoreChances;
-  private static ScoreBoardService scoreBoardService = new ScoreBoardService();
+  private List<Integer> scoreChances;
+  private ScoreBoardService scoreBoardService = new ScoreBoardService();
 
-  public static ScoreBoard startFirstInning(Match match) {
+  public ScoreBoard startFirstInning(Match match) {
     ScoreBoard scoreBoard = new ScoreBoard();
     Map<Integer, String> balls = new HashMap<>();
     TeamDetails battingTeam = match.getBattingFirstTeam();
@@ -37,7 +39,7 @@ public class InningsUtil {
     return scoreBoard;
   }
 
-  public static ScoreBoard startSecondInning(Match match, ScoreBoard scoreBoardTeam1){
+  public ScoreBoard startSecondInning(Match match, ScoreBoard scoreBoardTeam1){
     ScoreBoard scoreBoard = new ScoreBoard();
     Map<Integer, String> balls = new HashMap<>();
     TeamDetails battingTeam = match.getBowlingFirstTeam();
@@ -58,7 +60,7 @@ public class InningsUtil {
     return scoreBoard;
   }
 
-  private static List<Integer> makeScoreChances(){
+  private List<Integer> makeScoreChances(){
     List<Integer> scoreChances = new ArrayList<>();
     scoreChances.add(20);
     scoreChances.add(45);
@@ -71,7 +73,7 @@ public class InningsUtil {
     return scoreChances;
   }
 
-  private static void updateScoreBoardForEachBall(ScoreBoard scoreBoard, Map<Integer, String> balls){
+  private void updateScoreBoardForEachBall(ScoreBoard scoreBoard, Map<Integer, String> balls){
     Integer score;
     score = CricketUtility.scoreGenerator(scoreChances, scoreChances.get(scoreChances.size() - 1));
 
@@ -93,15 +95,15 @@ public class InningsUtil {
     }
   }
 
-  private static String getPartnershipBrokenString(ScoreBoard scoreBoard){
+  private String getPartnershipBrokenString(ScoreBoard scoreBoard){
     return String.format(PARTNERSHIP_BROKEN_STRING, scoreBoard.getWicketFallen(), scoreBoardService.currentPartnerships(scoreBoard));
   }
 
-  private static String getAfterEachOverString(ScoreBoard scoreBoard){
+  private String getAfterEachOverString(ScoreBoard scoreBoard){
     return String.format(AFTER_EACH_OVER_STRING, scoreBoard.getOversThrown(), scoreBoard.getTeamScore(), scoreBoard.getWicketFallen());
   }
 
-  private static String getInningsOverString(ScoreBoard scoreBoard){
+  private String getInningsOverString(ScoreBoard scoreBoard){
     return String.format(INNINGS_OVER_STRING, scoreBoard.getTeamName(), scoreBoard.getTeamScore(), scoreBoard.getWicketFallen());
   }
 }

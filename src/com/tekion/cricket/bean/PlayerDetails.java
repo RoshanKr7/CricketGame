@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class PlayerDetails {
-    String playerName;
-    String playerType;
-    int battingRating;
-    int bowlingRating;
+    private String playerName;
+    private String playerType;
+    private int battingRating;
+    private int bowlingRating;
 }
