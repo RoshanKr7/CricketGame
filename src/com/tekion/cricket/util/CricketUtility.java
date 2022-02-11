@@ -30,7 +30,7 @@ public class CricketUtility {
     }
   }
 
-  public void result(ScoreBoard scoreBoardTeam1, ScoreBoard scoreBoardTeam2) {
+  public void findResult(ScoreBoard scoreBoardTeam1, ScoreBoard scoreBoardTeam2) {
     if (scoreBoardTeam1.getTeamScore() > scoreBoardTeam2.getTeamScore()) {
       System.out.println(getTeamOneWonString(scoreBoardTeam1, scoreBoardTeam2));
     } else if (scoreBoardTeam1.getTeamScore() < scoreBoardTeam2.getTeamScore()) {

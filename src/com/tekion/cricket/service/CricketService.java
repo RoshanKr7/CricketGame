@@ -1,10 +1,8 @@
 package com.tekion.cricket.service;
 
 import com.tekion.cricket.bean.Match;
-import com.tekion.cricket.bean.PlayerDetails;
 import com.tekion.cricket.bean.ScoreBoard;
 import com.tekion.cricket.bean.TeamDetails;
-import com.tekion.cricket.util.Constants;
 import com.tekion.cricket.util.CricketUtility;
 import com.tekion.cricket.util.InningsUtil;
 
@@ -19,12 +17,13 @@ class CricketService {
 
   public static void main(String[] args) throws InterruptedException {
     Match match = new Match();
+    TeamService teamService = new TeamService();
     logger.info("Enter Team 1 Details : ");
-    TeamDetails teamOneDetails = initialiseTeam();
+    TeamDetails teamOneDetails = teamService.initialiseTeam();
     match.setTeamOneName(teamOneDetails.getTeamName());
 
     logger.info("Enter Player 2 Name : ");
-    TeamDetails teamTwoDetails = initialiseTeam();
+    TeamDetails teamTwoDetails = teamService.initialiseTeam();
     match.setTeamTwoName(teamTwoDetails.getTeamName());
 
     match.setNumberOfOvers(getNumberOfOvers());
@@ -38,47 +37,9 @@ class CricketService {
 
     ScoreBoard scoreBoardTeam2 = InningsUtil.startSecondInning(match, scoreBoardTeam1);
 
-    CricketUtility.result(scoreBoardTeam1, scoreBoardTeam2);
+    CricketUtility.findResult(scoreBoardTeam1, scoreBoardTeam2);
   }
 
-  private static TeamDetails initialiseTeam(){
-    TeamDetails teamDetails = new TeamDetails();
-    System.out.print("Enter team name : ");
-    teamDetails.setTeamName(getTeamName());
-    int numberOfPlayer = 0;
-    List <PlayerDetails> playerDetailsList = new ArrayList<>();
-    while(numberOfPlayer <= Constants.NUMBER_WICKETS){
-      PlayerDetails playerDetails = new PlayerDetails();
-      System.out.println("Enter Player " + (numberOfPlayer+1) + " Detail : ");
-      System.out.print("Name : ");
-      playerDetails.setPlayerName(scanner.next());
-      System.out.print("\nType (Bat/Ball) : ");
-      playerDetails.setPlayerType(scanner.next());
-      System.out.print("\nBatting Rating (Out of 10) : ");
-      playerDetails.setBattingRating(scanner.nextInt());
-      System.out.print("\nBowling Rating (Out of 10) : ");
-      playerDetails.setBowlingRating(scanner.nextInt());
-      playerDetailsList.add(playerDetails);
-      numberOfPlayer++;
-    }
-    teamDetails.setPlayersDetails(playerDetailsList);
-    return teamDetails;
-  }
-
-
-  private static String getTeamName(){
-    String teamName;
-    while (true) {
-      teamName = scanner.next();
-      if (teamName.equals("")) {
-        logger.info("Please Enter something in Name");
-      }
-      else{
-        break;
-      }
-    }
-    return teamName;
-  }
 
   private static int getNumberOfOvers(){
     int overs;

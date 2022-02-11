@@ -3,6 +3,7 @@ package com.tekion.cricket.bean;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,8 +12,8 @@ import java.util.Map;
 public class ScoreBoard {
 
   private String teamName;
-  public List<Integer> partnerships = new ArrayList<>();
-  public List<Over> overs;
+  private List<Integer> partnerships = new ArrayList<>();
+  private List<Map<Integer, String>> overs;
   private int wicketFallen;
   private int oversThrown;
   private int teamScore;
