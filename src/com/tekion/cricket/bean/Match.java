@@ -4,10 +4,12 @@ import lombok.Data;
 
 @Data
 public class Match {
-    private String TeamOneName;
-    private String TeamTwoName;
+    private String teamOneName;
+    private String teamTwoName;
     private int numberOfOvers;
     private TeamDetails tossWinner;
     private TeamDetails battingFirstTeam;
     private TeamDetails bowlingFirstTeam;
+    private ScoreBoard scoreBoardInnings1;
+    private ScoreBoard scoreBoardInnings2;
 }

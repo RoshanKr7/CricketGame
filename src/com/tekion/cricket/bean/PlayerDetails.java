@@ -4,8 +4,14 @@ import lombok.Data;
 
 @Data
 public class PlayerDetails {
+    public enum PlayerType{
+        BAT,
+        BALL
+    }
+
+    private int playerCode;
     private String playerName;
-    private String playerType;
+    private PlayerType playerType;
     private int battingRating;
     private int bowlingRating;
 }

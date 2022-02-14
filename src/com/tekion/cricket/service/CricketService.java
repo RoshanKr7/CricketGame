@@ -15,7 +15,7 @@ class CricketService {
   private static Logger logger = Logger.getLogger(CricketService.class.getName());
   private static final String TOSS_WON_STRING = "Team %s Won the Toss";
 
-  public static void main(String[] args) throws InterruptedException {
+  public static void main(String[] args){
     Match match = new Match();
     TeamService teamService = new TeamService();
     logger.info("Enter Team 1 Details : ");
@@ -33,11 +33,13 @@ class CricketService {
 
     chooseBatOrField(teamOneDetails, teamTwoDetails, match);
 
-    ScoreBoard scoreBoardTeam1 = InningsUtil.startFirstInning(match);
+    ScoreBoard scoreBoardInnings1 = InningsUtil.playFirstInning(match);
+    match.setScoreBoardInnings1(scoreBoardInnings1);
 
-    ScoreBoard scoreBoardTeam2 = InningsUtil.startSecondInning(match, scoreBoardTeam1);
+    ScoreBoard scoreBoardInnings2 = InningsUtil.playSecondInning(match);
+    match.setScoreBoardInnings2(scoreBoardInnings2);
 
-    CricketUtility.findResult(scoreBoardTeam1, scoreBoardTeam2);
+    CricketUtility.findResult(match);
   }
 
 

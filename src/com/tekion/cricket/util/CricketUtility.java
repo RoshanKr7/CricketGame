@@ -1,5 +1,6 @@
 package com.tekion.cricket.util;
 
+import com.tekion.cricket.bean.Match;
 import com.tekion.cricket.bean.ScoreBoard;
 import lombok.experimental.UtilityClass;
 
@@ -30,21 +31,21 @@ public class CricketUtility {
     }
   }
 
-  public void findResult(ScoreBoard scoreBoardTeam1, ScoreBoard scoreBoardTeam2) {
-    if (scoreBoardTeam1.getTeamScore() > scoreBoardTeam2.getTeamScore()) {
-      System.out.println(getTeamOneWonString(scoreBoardTeam1, scoreBoardTeam2));
-    } else if (scoreBoardTeam1.getTeamScore() < scoreBoardTeam2.getTeamScore()) {
-      System.out.println(getTeamTwoWonString(scoreBoardTeam2));
+  public void findResult(Match match) {
+    if (match.getScoreBoardInnings1().getTeamScore() > match.getScoreBoardInnings2().getTeamScore()) {
+      System.out.println(getTeamOneWonString(match.getScoreBoardInnings1(), match.getScoreBoardInnings2()));
+    } else if (match.getScoreBoardInnings1().getTeamScore() < match.getScoreBoardInnings2().getTeamScore()) {
+      System.out.println(getTeamTwoWonString(match.getScoreBoardInnings2()));
     } else {
       System.out.println("!!Draw!!");
     }
   }
 
-  private String getTeamOneWonString(ScoreBoard scoreBoardTeam1, ScoreBoard scoreBoardTeam2){
-    return String.format(TEAM_ONE_WON_STRING, scoreBoardTeam1.getTeamName(), scoreBoardTeam1.getTeamScore() - scoreBoardTeam2.getTeamScore());
+  private String getTeamOneWonString(ScoreBoard scoreBoardInnings1, ScoreBoard scoreBoardInnings2){
+    return String.format(TEAM_ONE_WON_STRING, scoreBoardInnings1.getTeamName(), scoreBoardInnings1.getTeamScore() - scoreBoardInnings2.getTeamScore());
   }
 
-  private String getTeamTwoWonString(ScoreBoard scoreBoardTeam2){
-    return String.format(TEAM_TWO_WON_STRING, scoreBoardTeam2.getTeamName(), (Constants.NUMBER_WICKETS-scoreBoardTeam2.getWicketFallen()));
+  private String getTeamTwoWonString(ScoreBoard scoreBoardInnings2){
+    return String.format(TEAM_TWO_WON_STRING, scoreBoardInnings2.getTeamName(), (Constants.NUMBER_WICKETS-scoreBoardInnings2.getWicketFallen()));
   }
 }
