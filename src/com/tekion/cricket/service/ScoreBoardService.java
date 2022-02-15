@@ -17,11 +17,13 @@ public class ScoreBoardService {
         if(teamName == null){
             System.out.println("Problem in function initialiseScoreboard");
         }
-        scoreBoard.setTeamName(teamName);
+        else{
+            scoreBoard.setTeamName(teamName);
+        }
     }
 
     public void initialiseOpeningBatters(ScoreBoard scoreBoard, List<BattingScoreCard> battingScoreCards, PlayerDetails batterOne, PlayerDetails batterTwo){
-        if(batterOne == null || batterTwo == null){
+        if(batterOne == null || batterTwo == null || scoreBoard == null){
             System.out.println("Problem in function initialiseCurrentBatters");
         }
         else{
@@ -39,7 +41,7 @@ public class ScoreBoardService {
         Integer bowlerCode;
         while (true) {
             bowlerCode = scanner.nextInt();
-            if(bowlerCode == currentBowler){
+            if(bowlerCode.equals(currentBowler)){
                 logger.info("Same Bowler can't bowl continuous Overs");
             }
             else if (bowlerCode >= 0 && bowlerCode < bowlingTeam.getPlayersDetails().size()) {
@@ -73,23 +75,23 @@ public class ScoreBoardService {
     }
 
     public void addScoreToPartnerships(ScoreBoard scoreBoard, int score) {
-        List<Integer> partnership = scoreBoard.getPartnerships();
-        if(partnership == null){
+        if(scoreBoard == null){
             System.out.println("Problem in function addScoreToPartnerships");
         }
         else{
+            List<Integer> partnership = scoreBoard.getPartnerships();
             partnership.set(scoreBoard.getWicketFallen(), partnership.get(scoreBoard.getWicketFallen()) + score);
             scoreBoard.setPartnerships(partnership);
         }
     }
 
     public void incrementOver(ScoreBoard scoreBoard, Map<Integer, String> balls){
-        Over over = new Over();
-        List<Over> overs = scoreBoard.getOvers();
-        if(balls == null){
+        if(balls == null || scoreBoard == null){
             System.out.println("Problem in function incrementOver");
         }
         else{
+            Over over = new Over();
+            List<Over> overs = scoreBoard.getOvers();
             over.setBalls(balls);
             overs.add(over);
             scoreBoard.setOvers(overs);
