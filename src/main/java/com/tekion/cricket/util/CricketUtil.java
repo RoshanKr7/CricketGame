@@ -10,7 +10,7 @@ import java.util.Random;
 
 @UtilityClass
 
-public class CricketUtility {
+public class CricketUtil {
   private static Random random = new Random();
   private static final String TEAM_ONE_WON_STRING = "Team %s has won the match by %d Runs";
   private static final String TEAM_TWO_WON_STRING = "Team %s has won the match by %d Wickets";

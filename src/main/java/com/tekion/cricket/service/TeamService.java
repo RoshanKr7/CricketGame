@@ -33,13 +33,14 @@ public class TeamService {
     public TeamDetails initialiseTeamByFile() {
         TeamDetails teamDetails = new TeamDetails();
         System.out.print("Enter team file name : ");
-        String teamFileName = scanner.next();
+        String teamFileName = getTeamFileName();
         File file = new File("/Users/rk/Downloads/cricket/src/main/java/com/tekion/cricket/teamfile/" + teamFileName.trim());
         List<PlayerDetails> playerDetailsList = new ArrayList<>();
         try {
             Scanner teamFile = new Scanner(file);
-            if(teamFile.hasNextLine())
-            teamDetails.setTeamName(teamFile.nextLine());
+            if(teamFile.hasNextLine()){
+                teamDetails.setTeamName(teamFile.nextLine());
+            }
             int numberOfPlayer = 0;
             while(teamFile.hasNextLine()){
                 PlayerDetails playerDetails = new PlayerDetails();
@@ -51,7 +52,8 @@ public class TeamService {
                 playerDetailsList.add(playerDetails);
                 numberOfPlayer++;
             }
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -98,6 +100,19 @@ public class TeamService {
                 return PlayerDetails.PlayerType.BALL;
             }
             logger.info("Please Enter correct Player type");
+        }
+    }
+
+    private String getTeamFileName(){
+        String teamFileName;
+        while(true){
+            teamFileName = scanner.next();
+            if(teamFileName.equalsIgnoreCase("royals") || teamFileName.equalsIgnoreCase("rhinos")){
+                return teamFileName.toLowerCase();
+            }
+            else{
+                logger.info("\nEnter a valid file name");
+            }
         }
     }
 

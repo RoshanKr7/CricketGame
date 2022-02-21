@@ -1,7 +1,6 @@
 package com.tekion.cricket.controller;
 
 import com.tekion.cricket.bean.BowlingScoreCard;
-import com.tekion.cricket.exception.ResourceNotFoundException;
 import com.tekion.cricket.repo.BowlingScoreCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +23,17 @@ public class BowlingScoreCardController {
     }
 
     // Get bowling ScoreCard By matchId
-    @GetMapping("{id}")
-    public ResponseEntity<BowlingScoreCard> getBowlingScoreCardById(@PathVariable Integer id){
-        BowlingScoreCard bowlingScoreCard = bowlingScoreCardRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Bowling ScoreCard not exist with id:" + id));
-        return ResponseEntity.ok(bowlingScoreCard);
+    @GetMapping("{matchId}")
+    public ResponseEntity<List<BowlingScoreCard>> getBowlingScoreCardByMatchId(@PathVariable Integer matchId){
+        List<BowlingScoreCard> bowlingScoreCards = bowlingScoreCardRepository.findByMatchId((matchId));
+        return ResponseEntity.ok(bowlingScoreCards);
+    }
+
+    // Get bowling ScoreCard By matchId and Innings
+    @GetMapping("{matchId}/{inningsNumber}")
+    public ResponseEntity<List<BowlingScoreCard>> getBowlingScoreCardByMatchIdAndInnings(
+            @PathVariable(name = "matchId") Integer matchId, @PathVariable(name = "inningsNumber") Integer inningsNumber){
+        List<BowlingScoreCard> bowlingScoreCards = bowlingScoreCardRepository.findByMatchIdAndInningsNumber(matchId, inningsNumber);
+        return ResponseEntity.ok(bowlingScoreCards);
     }
 }

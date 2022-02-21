@@ -1,6 +1,5 @@
 package com.tekion.cricket;
 
-import com.tekion.cricket.bean.BowlingScoreCard;
 import com.tekion.cricket.bean.Match;
 import com.tekion.cricket.bean.ScoreBoard;
 import com.tekion.cricket.bean.TeamDetails;
@@ -11,15 +10,18 @@ import com.tekion.cricket.service.BattingScoreCardService;
 import com.tekion.cricket.service.BowlingScoreCardService;
 import com.tekion.cricket.service.MatchSummaryService;
 import com.tekion.cricket.service.TeamService;
-import com.tekion.cricket.util.CricketUtility;
+import com.tekion.cricket.util.CricketUtil;
 import com.tekion.cricket.util.InningsUtil;
+import com.tekion.cricket.util.TossUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import static com.tekion.cricket.service.CricketService.*;
+import java.util.Scanner;
+import java.util.logging.Logger;
+
 
 
 @SpringBootApplication
@@ -28,6 +30,8 @@ public class CricketApplication implements ApplicationRunner {
     private static final String TOSS_WON_STRING = "Team %s Won the Toss";
     private BattingScoreCardService battingScoreCardService = new BattingScoreCardService();
     private BowlingScoreCardService bowlingScoreCardService = new BowlingScoreCardService();
+    private static Logger logger = Logger.getLogger(CricketApplication.class.getName());
+    private static Scanner scanner = new Scanner(System.in);
     @Autowired
     private MatchSummaryRepository matchSummaryRepository;
     @Autowired
@@ -37,21 +41,32 @@ public class CricketApplication implements ApplicationRunner {
 
 	public static void main(String[] args) {
         TeamService teamService = new TeamService();
-        System.out.println("\nEnter Team 1 Details File Name: ");
-    //    TeamDetails teamOneDetails = teamService.initialiseTeam();
-        TeamDetails teamOneDetails = teamService.initialiseTeamByFile();
+        TeamDetails teamOneDetails;
+        TeamDetails teamTwoDetails;
+        System.out.println("Do you want to Enter team by file or Manually?");
+        String teamDetailEntryWay = getWayToEnterTeamDetails();
+        if(teamDetailEntryWay.equalsIgnoreCase("file")){
+            System.out.println("\nEnter Team 1 Details File Name: ");
+            teamOneDetails = teamService.initialiseTeamByFile();
+            System.out.println("\nEnter Team 2 Details File name : ");
+            teamTwoDetails = teamService.initialiseTeamByFile();
+        }
+        else{
+            System.out.println("\nEnter Team 1 Details : ");
+            teamOneDetails = teamService.initialiseTeam();
+            System.out.println("\nEnter Team 2 Details : ");
+            teamTwoDetails = teamService.initialiseTeam();
+        }
+
         match.setTeamOneName(teamOneDetails.getTeamName());
-        System.out.println("\nEnter Team 2 Details File name : ");
-    //    TeamDetails teamTwoDetails = teamService.initialiseTeam();
-        TeamDetails teamTwoDetails = teamService.initialiseTeamByFile();
         match.setTeamTwoName(teamTwoDetails.getTeamName());
 
         match.setNumberOfOvers(getNumberOfOvers());
 
-        match.setTossWinner(toss(teamOneDetails, teamTwoDetails));
+        match.setTossWinner(TossUtil.toss(teamOneDetails, teamTwoDetails));
         System.out.println(getTossWonString(match.getTossWinner().getTeamName()));
 
-        chooseBatOrField(teamOneDetails, teamTwoDetails, match);
+        TossUtil.chooseBatOrField(teamOneDetails, teamTwoDetails, match);
 
         ScoreBoard scoreBoardInnings1 = InningsUtil.playFirstInning(match);
         match.setScoreBoardInnings1(scoreBoardInnings1);
@@ -61,10 +76,7 @@ public class CricketApplication implements ApplicationRunner {
 
         MatchSummaryService matchSummaryService = new MatchSummaryService();
         match.setMatchSummary(matchSummaryService.finaliseMatchSummary(match));
-        CricketUtility.findResult(match);
-        for (BowlingScoreCard bowlingScoreCard : match.getScoreBoardInnings2().getBowlingScoreCard()){
-            System.out.println(bowlingScoreCard);
-        }
+        CricketUtil.findResult(match);
         SpringApplication.run(CricketApplication.class, args);
 	}
 
@@ -78,6 +90,35 @@ public class CricketApplication implements ApplicationRunner {
         bowlingScoreCardRepository.saveAll(match.getScoreBoardInnings1().getBowlingScoreCard());
         bowlingScoreCardRepository.saveAll(match.getScoreBoardInnings2().getBowlingScoreCard());
 	}
+
+    private static String getWayToEnterTeamDetails(){
+        String teamDetailEntryWay;
+        while(true){
+            teamDetailEntryWay = scanner.next();
+            if(teamDetailEntryWay.equalsIgnoreCase("file")){
+                return teamDetailEntryWay;
+            }
+            else if(teamDetailEntryWay.equalsIgnoreCase("manually")){
+                return teamDetailEntryWay;
+            }
+            else{
+                logger.info("\nEnter a valid Option");
+            }
+        }
+    }
+
+    private static int getNumberOfOvers(){
+        int overs;
+        while (true) {
+            logger.info("\nNo. of Overs in the Match : ");
+            overs = scanner.nextInt();
+            if (overs > 0) {
+                break;
+            }
+            logger.info("Please Enter a valid number greater than 0");
+        }
+        return overs;
+    }
 
     private static String getTossWonString(String tossWinner){
         return String.format(TOSS_WON_STRING, tossWinner);
