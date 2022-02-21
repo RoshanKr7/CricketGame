@@ -1,57 +1,21 @@
 package com.tekion.cricket.service;
 
-import com.tekion.cricket.CricketApplication;
 import com.tekion.cricket.bean.Match;
-import com.tekion.cricket.bean.ScoreBoard;
 import com.tekion.cricket.bean.TeamDetails;
-import com.tekion.cricket.util.CricketUtility;
-import com.tekion.cricket.util.InningsUtil;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.*;
+import java.util.Random;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
-@SpringBootApplication
 public class CricketService {
   private static Random random = new Random();
   private static Scanner scanner = new Scanner(System.in);
   private static Logger logger = Logger.getLogger(CricketService.class.getName());
-  private static final String TOSS_WON_STRING = "Team %s Won the Toss";
 
-  public static void main(String[] args){
-    SpringApplication.run(CricketApplication.class, args);
-    Match match = new Match();
-    TeamService teamService = new TeamService();
-    logger.info("Enter Team 1 Details : ");
-    TeamDetails teamOneDetails = teamService.initialiseTeam();
-    match.setTeamOneName(teamOneDetails.getTeamName());
-
-    logger.info("Enter Player 2 Name : ");
-    TeamDetails teamTwoDetails = teamService.initialiseTeam();
-    match.setTeamTwoName(teamTwoDetails.getTeamName());
-
-    match.setNumberOfOvers(getNumberOfOvers());
-
-    match.setTossWinner(toss(teamOneDetails, teamTwoDetails));
-    logger.info(getTossWonString(match.getTossWinner().getTeamName()));
-
-    chooseBatOrField(teamOneDetails, teamTwoDetails, match);
-
-    ScoreBoard scoreBoardInnings1 = InningsUtil.playFirstInning(match);
-    match.setScoreBoardInnings1(scoreBoardInnings1);
-
-    ScoreBoard scoreBoardInnings2 = InningsUtil.playSecondInning(match);
-    match.setScoreBoardInnings2(scoreBoardInnings2);
-
-    CricketUtility.findResult(match);
-  }
-
-
-  private static int getNumberOfOvers(){
+  public static int getNumberOfOvers(){
     int overs;
     while (true) {
-      logger.info("No. of Overs in the Match : ");
+      logger.info("\nNo. of Overs in the Match : ");
       overs = scanner.nextInt();
       if (overs > 0) {
         break;
@@ -61,7 +25,7 @@ public class CricketService {
     return overs;
   }
 
-  private static TeamDetails toss(TeamDetails teamOneDetails, TeamDetails teamTwoDetails){
+  public static TeamDetails toss(TeamDetails teamOneDetails, TeamDetails teamTwoDetails){
     int tossResult = random.nextInt(2);
     if(tossResult == 0){
       return teamOneDetails;
@@ -71,7 +35,7 @@ public class CricketService {
     }
   }
 
-  private static void chooseBatOrField(TeamDetails teamOneDetails, TeamDetails teamtwoDetails, Match match){
+  public static void chooseBatOrField(TeamDetails teamOneDetails, TeamDetails teamTwoDetails, Match match){
     int battingChoice;
     while (true) {
       System.out.println("Press 0 for Bat First \nPress 1 for Field First");
@@ -85,7 +49,7 @@ public class CricketService {
     if(battingChoice == 0){
       match.setBattingFirstTeam(match.getTossWinner());
       if(match.getTossWinner().equals(teamOneDetails)){
-        match.setBowlingFirstTeam(teamtwoDetails);
+        match.setBowlingFirstTeam(teamTwoDetails);
       }
       else{
         match.setBowlingFirstTeam(teamOneDetails);
@@ -94,7 +58,7 @@ public class CricketService {
     else{
       match.setBowlingFirstTeam(match.getTossWinner());
       if(match.getTossWinner().equals(teamOneDetails)){
-        match.setBattingFirstTeam(teamtwoDetails);
+        match.setBattingFirstTeam(teamTwoDetails);
       }
       else{
         match.setBattingFirstTeam(teamOneDetails);
@@ -102,7 +66,4 @@ public class CricketService {
     }
   }
 
-  private static String getTossWonString(String tossWinner){
-    return String.format(TOSS_WON_STRING, tossWinner);
-  }
 }

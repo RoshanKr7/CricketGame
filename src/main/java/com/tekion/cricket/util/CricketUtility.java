@@ -1,6 +1,7 @@
 package com.tekion.cricket.util;
 
 import com.tekion.cricket.bean.Match;
+import com.tekion.cricket.bean.MatchSummary;
 import com.tekion.cricket.bean.ScoreBoard;
 import lombok.experimental.UtilityClass;
 
@@ -32,11 +33,15 @@ public class CricketUtility {
   }
 
   public void findResult(Match match) {
+    MatchSummary matchSummary = match.getMatchSummary();
     if (match.getScoreBoardInnings1().getTeamScore() > match.getScoreBoardInnings2().getTeamScore()) {
+      matchSummary.setWinningTeam(match.getScoreBoardInnings1().getTeamName());
       System.out.println(getTeamOneWonString(match.getScoreBoardInnings1(), match.getScoreBoardInnings2()));
     } else if (match.getScoreBoardInnings1().getTeamScore() < match.getScoreBoardInnings2().getTeamScore()) {
+      matchSummary.setWinningTeam(match.getScoreBoardInnings2().getTeamName());
       System.out.println(getTeamTwoWonString(match.getScoreBoardInnings2()));
     } else {
+      matchSummary.setWinningTeam("Draw");
       System.out.println("!!Draw!!");
     }
   }

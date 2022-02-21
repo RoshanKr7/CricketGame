@@ -22,7 +22,7 @@ public class ScoreBoardService {
         }
     }
 
-    public void initialiseOpeningBatters(ScoreBoard scoreBoard, List<BattingScoreCard> battingScoreCards, PlayerDetails batterOne, PlayerDetails batterTwo){
+    public void initialiseOpeningBatters(ScoreBoard scoreBoard, List<BattingScoreCard> battingScoreCards, PlayerDetails batterOne, PlayerDetails batterTwo, int inningsNumber){
         if(batterOne == null || batterTwo == null || scoreBoard == null){
             System.out.println("Problem in function initialiseCurrentBatters");
         }
@@ -32,8 +32,8 @@ public class ScoreBoardService {
             currentBatters.add(batterTwo.getPlayerCode());
             scoreBoard.setCurrentBatters(currentBatters);
 
-            battingScoreBoardService.initialiseBatter(battingScoreCards, batterOne);
-            battingScoreBoardService.initialiseBatter(battingScoreCards, batterTwo);
+            battingScoreBoardService.initialiseBatter(battingScoreCards, batterOne, inningsNumber);
+            battingScoreBoardService.initialiseBatter(battingScoreCards, batterTwo, inningsNumber);
         }
     }
 

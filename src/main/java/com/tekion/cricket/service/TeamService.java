@@ -4,6 +4,8 @@ import com.tekion.cricket.bean.PlayerDetails;
 import com.tekion.cricket.bean.TeamDetails;
 import com.tekion.cricket.util.Constants;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -24,6 +26,35 @@ public class TeamService {
             doInitialisePlayer(playerDetailsList, numberOfPlayer);
             numberOfPlayer++;
         }
+        teamDetails.setPlayersDetails(playerDetailsList);
+        return teamDetails;
+    }
+
+    public TeamDetails initialiseTeamByFile() {
+        TeamDetails teamDetails = new TeamDetails();
+        System.out.print("Enter team file name : ");
+        String teamFileName = scanner.next();
+        File file = new File("/Users/rk/Downloads/cricket/src/main/java/com/tekion/cricket/teamfile/" + teamFileName.trim());
+        List<PlayerDetails> playerDetailsList = new ArrayList<>();
+        try {
+            Scanner teamFile = new Scanner(file);
+            if(teamFile.hasNextLine())
+            teamDetails.setTeamName(teamFile.nextLine());
+            int numberOfPlayer = 0;
+            while(teamFile.hasNextLine()){
+                PlayerDetails playerDetails = new PlayerDetails();
+                playerDetails.setPlayerCode(numberOfPlayer);
+                playerDetails.setPlayerName(teamFile.nextLine());
+                playerDetails.setPlayerType(getPlayerTypeFromFile(teamFile.nextLine()));
+                playerDetails.setBattingRating(Integer.parseInt(teamFile.nextLine()));
+                playerDetails.setBowlingRating(Integer.parseInt(teamFile.nextLine()));
+                playerDetailsList.add(playerDetails);
+                numberOfPlayer++;
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
         teamDetails.setPlayersDetails(playerDetailsList);
         return teamDetails;
     }
@@ -67,6 +98,15 @@ public class TeamService {
                 return PlayerDetails.PlayerType.BALL;
             }
             logger.info("Please Enter correct Player type");
+        }
+    }
+
+    private PlayerDetails.PlayerType getPlayerTypeFromFile(String playerType){
+        if (playerType.equalsIgnoreCase("BAT")) {
+            return PlayerDetails.PlayerType.BAT;
+        }
+        else{
+            return PlayerDetails.PlayerType.BALL;
         }
     }
 }

@@ -12,4 +12,5 @@ public class Match {
     private TeamDetails bowlingFirstTeam;
     private ScoreBoard scoreBoardInnings1;
     private ScoreBoard scoreBoardInnings2;
+    private MatchSummary matchSummary;
 }

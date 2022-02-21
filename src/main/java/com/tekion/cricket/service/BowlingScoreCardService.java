@@ -1,15 +1,14 @@
 package com.tekion.cricket.service;
 
-import com.tekion.cricket.bean.BowlingScoreCard;
-import com.tekion.cricket.bean.PlayerDetails;
-import com.tekion.cricket.bean.TeamDetails;
+import com.tekion.cricket.bean.*;
 
 import java.util.List;
 
 public class BowlingScoreCardService {
-    public void initialiseBowler(List<BowlingScoreCard> bowlingScoreCards, TeamDetails bowlingTeam, Integer currentBowler){
+    public void initialiseBowler(List<BowlingScoreCard> bowlingScoreCards, TeamDetails bowlingTeam, Integer currentBowler, int inningsNumber){
         BowlingScoreCard bowlingScoreCard = new BowlingScoreCard();
         PlayerDetails bowler = bowlingTeam.getPlayersDetails().get(currentBowler);
+        bowlingScoreCard.setInningsNumber(inningsNumber);
         bowlingScoreCard.setPlayerCode(currentBowler);
         bowlingScoreCard.setPlayerName(bowler.getPlayerName());
         bowlingScoreCard.setNoOfBalls(0);
@@ -67,6 +66,16 @@ public class BowlingScoreCardService {
             bowlingScoreCard.setNoOfOvers(bowlingScoreCard.getNoOfOvers() + 1);
             bowlingScoreCard.setNoOfBalls(0);
             bowlingScoreCards.set(indexOfBowler, bowlingScoreCard);
+        }
+    }
+
+    public void addMatchIdToAllBowler(Match match){
+        int matchId = match.getMatchSummary().getMatchId();
+        for (BowlingScoreCard bowlingScoreCard : match.getScoreBoardInnings1().getBowlingScoreCard()) {
+            bowlingScoreCard.setMatchId(matchId);
+        }
+        for (BowlingScoreCard bowlingScoreCard : match.getScoreBoardInnings2().getBowlingScoreCard()) {
+            bowlingScoreCard.setMatchId(matchId);
         }
     }
 
