@@ -128,15 +128,7 @@ public class InningsUtil {
             updateScoreBoardForWicket(scoreBoard, battingTeam, battingScoreCards, bowlingScoreCards, balls);
         }
         else{
-            balls.put(balls.size(), score.toString());
-            scoreBoardService.addScoreToPartnerships(scoreBoard, score);
-            scoreBoardService.updateTeamScore(scoreBoard, score);
-            battingScoreCardService.addScoreToBatter(battingScoreCards, currentBatters.get(0), score);
-            bowlingScoreCardService.addScoreToBowler(bowlingScoreCards, scoreBoard.getCurrentBowler(), score);
-            if(score % 2 == 1){
-                Collections.swap(currentBatters, 0, 1);
-                scoreBoard.setCurrentBatters(currentBatters);
-            }
+            updateScoreBoardForRuns(scoreBoard, battingScoreCards, bowlingScoreCards, currentBatters, score, balls);
         }
         if(balls.size() == Constants.NUMBER_OF_BALL_IN_OVER){
             scoreBoardService.incrementOver(scoreBoard, balls);
@@ -172,6 +164,19 @@ public class InningsUtil {
             scoreBoard.setCurrentBatters(currentBatters);
         }
         CricketUtil.waitForMilliSec(2000);
+    }
+
+    private void updateScoreBoardForRuns(ScoreBoard scoreBoard, List<BattingScoreCard> battingScoreCards, List<BowlingScoreCard> bowlingScoreCards,
+                                         List<Integer> currentBatters, Integer score, Map<Integer, String> balls){
+        balls.put(balls.size(), score.toString());
+        scoreBoardService.addScoreToPartnerships(scoreBoard, score);
+        scoreBoardService.updateTeamScore(scoreBoard, score);
+        battingScoreCardService.addScoreToBatter(battingScoreCards, currentBatters.get(0), score);
+        bowlingScoreCardService.addScoreToBowler(bowlingScoreCards, scoreBoard.getCurrentBowler(), score);
+        if(score % 2 == 1){
+            Collections.swap(currentBatters, 0, 1);
+            scoreBoard.setCurrentBatters(currentBatters);
+        }
     }
 
     private String getPartnershipBrokenString(ScoreBoard scoreBoard){
