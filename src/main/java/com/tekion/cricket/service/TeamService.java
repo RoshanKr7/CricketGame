@@ -36,8 +36,7 @@ public class TeamService {
         String teamFileName = getTeamFileName();
         File file = new File("/Users/rk/Downloads/cricket/src/main/java/com/tekion/cricket/teamfile/" + teamFileName.trim());
         List<PlayerDetails> playerDetailsList = new ArrayList<>();
-        try {
-            Scanner teamFile = new Scanner(file);
+        try(Scanner teamFile = new Scanner(file)){
             if(teamFile.hasNextLine()){
                 teamDetails.setTeamName(teamFile.nextLine());
             }
@@ -56,6 +55,28 @@ public class TeamService {
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+
+//        try {
+//            Scanner teamFile = new Scanner(file);
+//            if(teamFile.hasNextLine()){
+//                teamDetails.setTeamName(teamFile.nextLine());
+//            }
+//            int numberOfPlayer = 0;
+//            while(teamFile.hasNextLine()){
+//                PlayerDetails playerDetails = new PlayerDetails();
+//                playerDetails.setPlayerCode(numberOfPlayer);
+//                playerDetails.setPlayerName(teamFile.nextLine());
+//                playerDetails.setPlayerType(getPlayerTypeFromFile(teamFile.nextLine()));
+//                playerDetails.setBattingRating(Integer.parseInt(teamFile.nextLine()));
+//                playerDetails.setBowlingRating(Integer.parseInt(teamFile.nextLine()));
+//                playerDetailsList.add(playerDetails);
+//                numberOfPlayer++;
+//            }
+//        }
+//        catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
         teamDetails.setPlayersDetails(playerDetailsList);
         return teamDetails;
@@ -107,7 +128,8 @@ public class TeamService {
         String teamFileName;
         while(true){
             teamFileName = scanner.next();
-            if(teamFileName.equalsIgnoreCase("royals") || teamFileName.equalsIgnoreCase("rhinos")){
+            if(teamFileName.equalsIgnoreCase("royals") || teamFileName.equalsIgnoreCase("rhinos")
+                    || teamFileName.equalsIgnoreCase("pirates")){
                 return teamFileName.toLowerCase();
             }
             else{
