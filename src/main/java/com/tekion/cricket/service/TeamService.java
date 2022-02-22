@@ -56,28 +56,6 @@ public class TeamService {
             e.printStackTrace();
         }
 
-
-//        try {
-//            Scanner teamFile = new Scanner(file);
-//            if(teamFile.hasNextLine()){
-//                teamDetails.setTeamName(teamFile.nextLine());
-//            }
-//            int numberOfPlayer = 0;
-//            while(teamFile.hasNextLine()){
-//                PlayerDetails playerDetails = new PlayerDetails();
-//                playerDetails.setPlayerCode(numberOfPlayer);
-//                playerDetails.setPlayerName(teamFile.nextLine());
-//                playerDetails.setPlayerType(getPlayerTypeFromFile(teamFile.nextLine()));
-//                playerDetails.setBattingRating(Integer.parseInt(teamFile.nextLine()));
-//                playerDetails.setBowlingRating(Integer.parseInt(teamFile.nextLine()));
-//                playerDetailsList.add(playerDetails);
-//                numberOfPlayer++;
-//            }
-//        }
-//        catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-
         teamDetails.setPlayersDetails(playerDetailsList);
         return teamDetails;
     }
