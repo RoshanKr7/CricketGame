@@ -35,9 +35,11 @@ public class CricketUtil {
   public void findResult(Match match) {
     MatchSummary matchSummary = match.getMatchSummary();
     if (match.getScoreBoardInnings1().getTeamScore() > match.getScoreBoardInnings2().getTeamScore()) {
+      match.setWinningTeam(match.getScoreBoardInnings1().getTeamName());
       matchSummary.setWinningTeam(match.getScoreBoardInnings1().getTeamName());
       System.out.println(getTeamOneWonString(match.getScoreBoardInnings1(), match.getScoreBoardInnings2()));
     } else if (match.getScoreBoardInnings1().getTeamScore() < match.getScoreBoardInnings2().getTeamScore()) {
+      match.setWinningTeam(match.getScoreBoardInnings2().getTeamName());
       matchSummary.setWinningTeam(match.getScoreBoardInnings2().getTeamName());
       System.out.println(getTeamTwoWonString(match.getScoreBoardInnings2()));
     } else {

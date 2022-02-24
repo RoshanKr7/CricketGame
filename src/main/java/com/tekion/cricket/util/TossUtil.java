@@ -12,13 +12,13 @@ public class TossUtil {
     private Random random = new Random();
     private Scanner scanner = new Scanner(System.in);
 
-    public TeamDetails toss(TeamDetails teamOneDetails, TeamDetails teamTwoDetails){
+    public String toss(TeamDetails teamOneDetails, TeamDetails teamTwoDetails){
         int tossResult = random.nextInt(2);
         if(tossResult == 0){
-            return teamOneDetails;
+            return teamOneDetails.getTeamName();
         }
         else{
-            return teamTwoDetails;
+            return teamTwoDetails.getTeamName();
         }
     }
 
@@ -34,21 +34,23 @@ public class TossUtil {
             }
         }
         if(battingChoice == 0){
-            match.setBattingFirstTeam(match.getTossWinner());
-            if(match.getTossWinner().equals(teamOneDetails)){
+            if(match.getTossWinnerName().equals(teamOneDetails.getTeamName())){
+                match.setBattingFirstTeam(teamOneDetails);
                 match.setBowlingFirstTeam(teamTwoDetails);
             }
             else{
+                match.setBattingFirstTeam(teamTwoDetails);
                 match.setBowlingFirstTeam(teamOneDetails);
             }
         }
         else{
-            match.setBowlingFirstTeam(match.getTossWinner());
-            if(match.getTossWinner().equals(teamOneDetails)){
+            if(match.getTossWinnerName().equals(teamOneDetails.getTeamName())){
                 match.setBattingFirstTeam(teamTwoDetails);
+                match.setBowlingFirstTeam(teamOneDetails);
             }
             else{
                 match.setBattingFirstTeam(teamOneDetails);
+                match.setBowlingFirstTeam(teamTwoDetails);
             }
         }
     }

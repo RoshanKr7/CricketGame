@@ -18,7 +18,6 @@ public class InningsUtil {
     private ScoreBoardService scoreBoardService = new ScoreBoardService();
     private BattingScoreCardService battingScoreCardService = new BattingScoreCardService();
     private BowlingScoreCardService bowlingScoreCardService = new BowlingScoreCardService();
-    private int inningsNumber;
 
     public ScoreBoard playFirstInning(Match match) {
         ScoreBoard scoreBoard = new ScoreBoard();
@@ -27,7 +26,6 @@ public class InningsUtil {
         TeamDetails bowlingTeam = match.getBowlingFirstTeam();
         List<BattingScoreCard> battingScoreCards = new ArrayList<>();
         List<BowlingScoreCard> bowlingScoreCards = new ArrayList<>();
-        inningsNumber = 1;
         scoreBoardService.initialiseScoreboard(scoreBoard, battingTeam.getTeamName());
 
         System.out.println(String.format(INNINGS_START_STRING, battingTeam.getTeamName()));
@@ -35,13 +33,13 @@ public class InningsUtil {
         PlayerDetails batterOne = battingTeam.getPlayersDetails().get(0);
         PlayerDetails batterTwo = battingTeam.getPlayersDetails().get(1);
 
-        scoreBoardService.initialiseOpeningBatters(scoreBoard, battingScoreCards, batterOne, batterTwo, inningsNumber);
+        scoreBoardService.initialiseOpeningBatters(scoreBoard, battingScoreCards, batterOne, batterTwo, battingTeam.getTeamId());
         scoreBoardService.startNewPartnership(scoreBoard);
         System.out.println("Enter Bowler Code");
         scoreBoard.setCurrentBowler(scoreBoardService.updateBowlerCode(bowlingTeam, -1));
         Integer currentBowler = scoreBoard.getCurrentBowler();
         if(!(bowlingScoreCardService.containsBowler(bowlingScoreCards, currentBowler))){
-            bowlingScoreCardService.initialiseBowler(bowlingScoreCards, bowlingTeam, currentBowler, inningsNumber);
+            bowlingScoreCardService.initialiseBowler(bowlingScoreCards, bowlingTeam, currentBowler, bowlingTeam.getTeamId());
         }
 
         while(scoreBoard.getWicketFallen() < Constants.NUMBER_WICKETS && scoreBoard.getOversThrown() < match.getNumberOfOvers()){
@@ -61,7 +59,6 @@ public class InningsUtil {
         TeamDetails bowlingTeam = match.getBattingFirstTeam();
         List<BattingScoreCard> battingScoreCards = new ArrayList<>();
         List<BowlingScoreCard> bowlingScoreCards = new ArrayList<>();
-        inningsNumber = 2;
         scoreBoardService.initialiseScoreboard(scoreBoard, battingTeam.getTeamName());
 
         System.out.println(String.format(INNINGS_START_STRING, battingTeam.getTeamName()));
@@ -69,13 +66,13 @@ public class InningsUtil {
         PlayerDetails batterOne = battingTeam.getPlayersDetails().get(0);
         PlayerDetails batterTwo = battingTeam.getPlayersDetails().get(1);
 
-        scoreBoardService.initialiseOpeningBatters(scoreBoard, battingScoreCards, batterOne, batterTwo, inningsNumber);
+        scoreBoardService.initialiseOpeningBatters(scoreBoard, battingScoreCards, batterOne, batterTwo, battingTeam.getTeamId());
         scoreBoardService.startNewPartnership(scoreBoard);
         System.out.println("Enter Bowler Code");
         scoreBoard.setCurrentBowler(scoreBoardService.updateBowlerCode(bowlingTeam, -1));
         Integer currentBowler = scoreBoard.getCurrentBowler();
         if(!(bowlingScoreCardService.containsBowler(bowlingScoreCards, currentBowler))){
-            bowlingScoreCardService.initialiseBowler(bowlingScoreCards, bowlingTeam, currentBowler, inningsNumber);
+            bowlingScoreCardService.initialiseBowler(bowlingScoreCards, bowlingTeam, currentBowler, bowlingTeam.getTeamId());
         }
 
         while(scoreBoard.getWicketFallen() < Constants.NUMBER_WICKETS && scoreBoard.getOversThrown() < match.getNumberOfOvers()){
@@ -141,7 +138,7 @@ public class InningsUtil {
                 scoreBoard.setCurrentBowler(scoreBoardService.updateBowlerCode(bowlingTeam, scoreBoard.getCurrentBowler()));
                 Integer currentBowler = scoreBoard.getCurrentBowler();
                 if(!bowlingScoreCardService.containsBowler(bowlingScoreCards, currentBowler)){
-                  bowlingScoreCardService.initialiseBowler(bowlingScoreCards, bowlingTeam, currentBowler, inningsNumber);
+                  bowlingScoreCardService.initialiseBowler(bowlingScoreCards, bowlingTeam, currentBowler, bowlingTeam.getTeamId());
                 }
             }
         }
@@ -159,7 +156,7 @@ public class InningsUtil {
         battingScoreCardService.batterInningOver(battingScoreCards, currentBatters.get(0));
         if(scoreBoard.getWicketFallen() != Constants.NUMBER_WICKETS){
             battingScoreCardService.initialiseBatter(
-                    battingScoreCards, battingTeam.getPlayersDetails().get(scoreBoard.getWicketFallen()+1), inningsNumber);
+                    battingScoreCards, battingTeam.getPlayersDetails().get(scoreBoard.getWicketFallen()+1), battingTeam.getTeamId());
             currentBatters.set(0, scoreBoard.getWicketFallen()+1);
             scoreBoard.setCurrentBatters(currentBatters);
         }

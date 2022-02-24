@@ -7,6 +7,6 @@ import java.io.Serializable;
 @Data
 public class BowlingScoreCardKeys implements Serializable {
     private int matchId;
-    private int inningsNumber;
+    private int teamId;
     private int playerCode;
 }

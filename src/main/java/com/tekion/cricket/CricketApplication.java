@@ -3,13 +3,10 @@ package com.tekion.cricket;
 import com.tekion.cricket.bean.Match;
 import com.tekion.cricket.bean.ScoreBoard;
 import com.tekion.cricket.bean.TeamDetails;
-import com.tekion.cricket.repo.BattingScoreCardRepository;
-import com.tekion.cricket.repo.BowlingScoreCardRepository;
-import com.tekion.cricket.repo.MatchSummaryRepository;
-import com.tekion.cricket.service.BattingScoreCardService;
-import com.tekion.cricket.service.BowlingScoreCardService;
-import com.tekion.cricket.service.MatchSummaryService;
-import com.tekion.cricket.service.TeamService;
+import com.tekion.cricket.repo.IBattingScoreCardRepository;
+import com.tekion.cricket.repo.IBowlingScoreCardRepository;
+import com.tekion.cricket.repo.IMatchSummaryRepository;
+import com.tekion.cricket.service.*;
 import com.tekion.cricket.util.CricketUtil;
 import com.tekion.cricket.util.InningsUtil;
 import com.tekion.cricket.util.TossUtil;
@@ -28,16 +25,16 @@ import java.util.logging.Logger;
 public class CricketApplication implements ApplicationRunner {
 	private static Match match = new Match();
     private static final String TOSS_WON_STRING = "Team %s Won the Toss";
-    private BattingScoreCardService battingScoreCardService = new BattingScoreCardService();
+    private BattingScoreCardService battingScoreCardService= new BattingScoreCardService();
     private BowlingScoreCardService bowlingScoreCardService = new BowlingScoreCardService();
     private static Logger logger = Logger.getLogger(CricketApplication.class.getName());
     private static Scanner scanner = new Scanner(System.in);
     @Autowired
-    private MatchSummaryRepository matchSummaryRepository;
+    private IMatchSummaryRepository matchSummaryRepository;
     @Autowired
-    private BattingScoreCardRepository battingScoreCardRepository;
+    private IBattingScoreCardRepository battingScoreCardRepository;
     @Autowired
-    private BowlingScoreCardRepository bowlingScoreCardRepository;
+    private IBowlingScoreCardRepository bowlingScoreCardRepository;
 
 	public static void main(String[] args) {
         TeamService teamService = new TeamService();
@@ -63,8 +60,8 @@ public class CricketApplication implements ApplicationRunner {
 
         match.setNumberOfOvers(getNumberOfOvers());
 
-        match.setTossWinner(TossUtil.toss(teamOneDetails, teamTwoDetails));
-        System.out.println(getTossWonString(match.getTossWinner().getTeamName()));
+        match.setTossWinnerName(TossUtil.toss(teamOneDetails, teamTwoDetails));
+        System.out.println(getTossWonString(match.getTossWinnerName()));
 
         TossUtil.chooseBatOrField(teamOneDetails, teamTwoDetails, match);
 

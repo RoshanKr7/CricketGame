@@ -1,14 +1,24 @@
 package com.tekion.cricket.service;
 
-import com.tekion.cricket.bean.*;
+import com.tekion.cricket.bean.BowlingScoreCard;
+import com.tekion.cricket.bean.Match;
+import com.tekion.cricket.bean.PlayerDetails;
+import com.tekion.cricket.bean.TeamDetails;
+import com.tekion.cricket.repo.IBowlingScoreCardRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-public class BowlingScoreCardService {
-    public void initialiseBowler(List<BowlingScoreCard> bowlingScoreCards, TeamDetails bowlingTeam, Integer currentBowler, int inningsNumber){
+@RestController
+public class BowlingScoreCardService implements IBowlingScoreCardService{
+    @Autowired
+    private IBowlingScoreCardRepository bowlingScoreCardRepository;
+
+    public void initialiseBowler(List<BowlingScoreCard> bowlingScoreCards, TeamDetails bowlingTeam, Integer currentBowler, int teamId){
         BowlingScoreCard bowlingScoreCard = new BowlingScoreCard();
         PlayerDetails bowler = bowlingTeam.getPlayersDetails().get(currentBowler);
-        bowlingScoreCard.setInningsNumber(inningsNumber);
+        bowlingScoreCard.setTeamId(teamId);
         bowlingScoreCard.setPlayerCode(currentBowler);
         bowlingScoreCard.setPlayerName(bowler.getPlayerName());
         bowlingScoreCard.setNoOfBalls(0);
@@ -90,5 +100,19 @@ public class BowlingScoreCardService {
             index++;
         }
         return indexOfBowler;
+    }
+
+    public List<BowlingScoreCard> findAllBowlingScoreCard(){
+        return bowlingScoreCardRepository.findAll();
+    }
+
+    public List<BowlingScoreCard> findBowlingScoreCardByMatchId(Integer matchId){
+        List<BowlingScoreCard> bowlingScoreCards = bowlingScoreCardRepository.findByMatchId(matchId);
+        return bowlingScoreCards;
+    }
+
+    public List<BowlingScoreCard> findBowlingScoreCardByMatchIdAndTeamId(Integer matchId, Integer teamId){
+        List<BowlingScoreCard> bowlingScoreCards = bowlingScoreCardRepository.findByMatchIdAndTeamId(matchId, teamId);
+        return bowlingScoreCards;
     }
 }

@@ -3,13 +3,23 @@ package com.tekion.cricket.service;
 import com.tekion.cricket.bean.BattingScoreCard;
 import com.tekion.cricket.bean.Match;
 import com.tekion.cricket.bean.PlayerDetails;
+import com.tekion.cricket.repo.IBattingScoreCardRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-public class BattingScoreCardService {
-    public void initialiseBatter(List<BattingScoreCard> battingScoreCards, PlayerDetails batter, int inningsNumber){
+
+@RestController
+public class BattingScoreCardService implements IBattingScoreCardService{
+
+    @Autowired
+    private IBattingScoreCardRepository battingScoreCardRepository;
+
+
+    public void initialiseBatter(List<BattingScoreCard> battingScoreCards, PlayerDetails batter, int TeamId){
         BattingScoreCard battingScoreCard = new BattingScoreCard();
-        battingScoreCard.setInningsNumber(inningsNumber);
+        battingScoreCard.setTeamId(TeamId);
         battingScoreCard.setPlayerCode(batter.getPlayerCode());
         battingScoreCard.setPlayerName(batter.getPlayerName());
         battingScoreCard.setRuns(0);
@@ -43,5 +53,20 @@ public class BattingScoreCardService {
         for (BattingScoreCard battingScoreCard : match.getScoreBoardInnings2().getBattingScoreCard()){
             battingScoreCard.setMatchId(matchId);
         }
+    }
+
+    public List<BattingScoreCard> findAllBattingScoreCard(){
+        List<BattingScoreCard> battingScoreCards = battingScoreCardRepository.findAll();
+        return battingScoreCards;
+    }
+
+    public List<BattingScoreCard> findBattingScoreCardByMatchId(Integer matchId){
+        List<BattingScoreCard> battingScoreCards = battingScoreCardRepository.findByMatchId((matchId));
+        return battingScoreCards;
+    }
+
+    public List<BattingScoreCard> findBattingScoreCardByMatchIdAndTeamId(Integer matchId, Integer teamId){
+        List<BattingScoreCard> battingScoreCards = battingScoreCardRepository.findByMatchIdAndTeamId(matchId, teamId);
+        return battingScoreCards;
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class TeamDetails {
+    private int teamId;
     private String teamName;
     private List<PlayerDetails> playersDetails;
 }

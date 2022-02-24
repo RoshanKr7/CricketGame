@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BattingScoreCardRepository extends JpaRepository<BattingScoreCard, Integer> {
+public interface IBattingScoreCardRepository extends JpaRepository<BattingScoreCard, Integer> {
 
     List<BattingScoreCard> findByMatchId(Integer matchId);
 
-    List<BattingScoreCard> findByMatchIdAndInningsNumber(Integer matchId, Integer inningsNumber);
+    List<BattingScoreCard> findByMatchIdAndTeamId(Integer matchId, Integer teamId);
 }

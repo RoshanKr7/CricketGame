@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
-public class ScoreBoardService {
+public class ScoreBoardService implements IScoreBoardService{
     private BattingScoreCardService battingScoreBoardService = new BattingScoreCardService();
     private Scanner scanner = new Scanner(System.in);
     private static Logger logger = Logger.getLogger(ScoreBoardService.class.getName());
@@ -22,7 +22,7 @@ public class ScoreBoardService {
         }
     }
 
-    public void initialiseOpeningBatters(ScoreBoard scoreBoard, List<BattingScoreCard> battingScoreCards, PlayerDetails batterOne, PlayerDetails batterTwo, int inningsNumber){
+    public void initialiseOpeningBatters(ScoreBoard scoreBoard, List<BattingScoreCard> battingScoreCards, PlayerDetails batterOne, PlayerDetails batterTwo, int teamId){
         if(batterOne == null || batterTwo == null || scoreBoard == null){
             System.out.println("Problem in function initialiseCurrentBatters");
         }
@@ -32,8 +32,8 @@ public class ScoreBoardService {
             currentBatters.add(batterTwo.getPlayerCode());
             scoreBoard.setCurrentBatters(currentBatters);
 
-            battingScoreBoardService.initialiseBatter(battingScoreCards, batterOne, inningsNumber);
-            battingScoreBoardService.initialiseBatter(battingScoreCards, batterTwo, inningsNumber);
+            battingScoreBoardService.initialiseBatter(battingScoreCards, batterOne, teamId);
+            battingScoreBoardService.initialiseBatter(battingScoreCards, batterTwo, teamId);
         }
     }
 
@@ -74,7 +74,7 @@ public class ScoreBoardService {
         }
     }
 
-    public void addScoreToPartnerships(ScoreBoard scoreBoard, int score) {
+    public void addScoreToPartnerships(ScoreBoard scoreBoard, int score){
         if(scoreBoard == null){
             System.out.println("Problem in function addScoreToPartnerships");
         }
@@ -99,7 +99,7 @@ public class ScoreBoardService {
         }
     }
 
-    public void updateTeamScore(ScoreBoard scoreBoard, int score) {
+    public void updateTeamScore(ScoreBoard scoreBoard, int score){
         if(scoreBoard == null){
             System.out.println("Problem in function updateTeamScore");
         }

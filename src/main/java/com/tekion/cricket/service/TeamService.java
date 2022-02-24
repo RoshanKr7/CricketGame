@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
-public class TeamService {
+public class TeamService implements ITeamService{
     private Scanner scanner = new Scanner(System.in);
     private Logger logger = Logger.getLogger(TeamService.class.getName());
 
@@ -39,6 +39,9 @@ public class TeamService {
         try(Scanner teamFile = new Scanner(file)){
             if(teamFile.hasNextLine()){
                 teamDetails.setTeamName(teamFile.nextLine());
+            }
+            if(teamFile.hasNextLine()){
+                teamDetails.setTeamId(Integer.parseInt(teamFile.nextLine()));
             }
             int numberOfPlayer = 0;
             while(teamFile.hasNextLine()){

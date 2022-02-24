@@ -15,7 +15,7 @@ public class BowlingScoreCard {
     @Id
     private int matchId;
     @Id
-    private int inningsNumber;
+    private int teamId;
     @Id
     private int playerCode;
     private String playerName;
