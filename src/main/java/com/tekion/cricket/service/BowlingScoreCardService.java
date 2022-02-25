@@ -2,7 +2,6 @@ package com.tekion.cricket.service;
 
 import com.tekion.cricket.bean.BowlingScoreCard;
 import com.tekion.cricket.bean.Match;
-import com.tekion.cricket.bean.PlayerDetails;
 import com.tekion.cricket.bean.TeamDetails;
 import com.tekion.cricket.repo.IBowlingScoreCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ public class BowlingScoreCardService implements IBowlingScoreCardService{
 
     public void initialiseBowler(List<BowlingScoreCard> bowlingScoreCards, TeamDetails bowlingTeam, Integer currentBowler, int teamId){
         BowlingScoreCard bowlingScoreCard = new BowlingScoreCard();
-        PlayerDetails bowler = bowlingTeam.getPlayersDetails().get(currentBowler);
         bowlingScoreCard.setTeamId(teamId);
         bowlingScoreCard.setPlayerCode(currentBowler);
         bowlingScoreCard.setNoOfBalls(0);
