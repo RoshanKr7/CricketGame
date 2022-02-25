@@ -10,7 +10,7 @@ import com.tekion.cricket.service.*;
 import com.tekion.cricket.util.CricketUtil;
 import com.tekion.cricket.util.InningsUtil;
 import com.tekion.cricket.util.TossUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,21 +20,22 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 
 
-
+@RequiredArgsConstructor
 @SpringBootApplication
 public class CricketApplication implements ApplicationRunner {
 	private static Match match = new Match();
     private static final String TOSS_WON_STRING = "Team %s Won the Toss";
     private BattingScoreCardService battingScoreCardService= new BattingScoreCardService();
     private BowlingScoreCardService bowlingScoreCardService = new BowlingScoreCardService();
+    private MatchService matchService = new MatchService();
     private static Logger logger = Logger.getLogger(CricketApplication.class.getName());
     private static Scanner scanner = new Scanner(System.in);
-    @Autowired
-    private IMatchSummaryRepository matchSummaryRepository;
-    @Autowired
-    private IBattingScoreCardRepository battingScoreCardRepository;
-    @Autowired
-    private IBowlingScoreCardRepository bowlingScoreCardRepository;
+    //@Autowired
+    private final IMatchSummaryRepository matchSummaryRepository;
+    //@Autowired
+    private final IBattingScoreCardRepository battingScoreCardRepository;
+    //@Autowired
+    private final IBowlingScoreCardRepository bowlingScoreCardRepository;
 
 	public static void main(String[] args) {
         TeamService teamService = new TeamService();
@@ -80,6 +81,7 @@ public class CricketApplication implements ApplicationRunner {
     @Override
 	public void run(ApplicationArguments args) throws Exception {
         matchSummaryRepository.save(match.getMatchSummary());
+        matchService.addMatchId(match);
         battingScoreCardService.addMatchIdToAllBatters(match);
         bowlingScoreCardService.addMatchIdToAllBowler(match);
         battingScoreCardRepository.saveAll(match.getScoreBoardInnings1().getBattingScoreCard());

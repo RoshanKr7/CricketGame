@@ -1,8 +1,7 @@
 package com.tekion.cricket.controller;
 
 import com.tekion.cricket.bean.MatchSummary;
-import com.tekion.cricket.exception.ResourceNotFoundException;
-import com.tekion.cricket.repo.IMatchSummaryRepository;
+import com.tekion.cricket.service.IMatchSummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,26 +12,24 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/match-summary")
+@RequestMapping("/matches")
 public class MatchSummaryController {
-    @Autowired
-    private IMatchSummaryRepository matchSummaryRepository;
+    @Autowired(required = false)
+    private IMatchSummaryService matchSummaryService;
 
     @GetMapping
     public List<MatchSummary> getAllMatchSummary(){
-        return matchSummaryRepository.findAll();
+        return matchSummaryService.findAllMatchSummary();
     }
 
     // Get Match Summary By matchId
-    @GetMapping("{id}")
-    public ResponseEntity<MatchSummary> getMatchSummaryById(@PathVariable("matchId") Integer id){
-        MatchSummary matchSummary = matchSummaryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Match Summary not exist with id:" + id));
-        return ResponseEntity.ok(matchSummary);
+    @GetMapping("/match-id/{matchId}")
+    public ResponseEntity<MatchSummary> getMatchSummaryByMatchId(@PathVariable("matchId") Integer matchId){
+        return ResponseEntity.ok(matchSummaryService.findMatchSummaryById(matchId));
     }
 
-    @GetMapping("/count")
+    @GetMapping("/counts")
     public int getMatchCount(){
-        return (int)matchSummaryRepository.count();
+        return matchSummaryService.findMatchCount();
     }
 }
