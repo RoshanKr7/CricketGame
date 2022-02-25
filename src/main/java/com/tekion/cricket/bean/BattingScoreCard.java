@@ -15,7 +15,6 @@ public class BattingScoreCard {
     private int teamId;
     @Id
     private int playerCode;
-    private String playerName;
     @Column(nullable = true)
     private int runs;
     @Column(nullable = true)

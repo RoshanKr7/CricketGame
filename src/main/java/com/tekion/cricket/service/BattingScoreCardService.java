@@ -17,11 +17,10 @@ public class BattingScoreCardService implements IBattingScoreCardService{
     private IBattingScoreCardRepository battingScoreCardRepository;
 
 
-    public void initialiseBatter(List<BattingScoreCard> battingScoreCards, PlayerDetails batter, int TeamId){
+    public void initialiseBatter(List<BattingScoreCard> battingScoreCards, PlayerDetails batter, int teamId){
         BattingScoreCard battingScoreCard = new BattingScoreCard();
-        battingScoreCard.setTeamId(TeamId);
+        battingScoreCard.setTeamId(teamId);
         battingScoreCard.setPlayerCode(batter.getPlayerCode());
-        battingScoreCard.setPlayerName(batter.getPlayerName());
         battingScoreCard.setRuns(0);
         battingScoreCard.setNoOfBallsPlayed(0);
         battingScoreCard.setFours(0);
@@ -56,17 +55,14 @@ public class BattingScoreCardService implements IBattingScoreCardService{
     }
 
     public List<BattingScoreCard> findAllBattingScoreCard(){
-        List<BattingScoreCard> battingScoreCards = battingScoreCardRepository.findAll();
-        return battingScoreCards;
+        return battingScoreCardRepository.findAll();
     }
 
     public List<BattingScoreCard> findBattingScoreCardByMatchId(Integer matchId){
-        List<BattingScoreCard> battingScoreCards = battingScoreCardRepository.findByMatchId((matchId));
-        return battingScoreCards;
+        return battingScoreCardRepository.findByMatchId((matchId));
     }
 
     public List<BattingScoreCard> findBattingScoreCardByMatchIdAndTeamId(Integer matchId, Integer teamId){
-        List<BattingScoreCard> battingScoreCards = battingScoreCardRepository.findByMatchIdAndTeamId(matchId, teamId);
-        return battingScoreCards;
+        return battingScoreCardRepository.findByMatchIdAndTeamId(matchId, teamId);
     }
 }

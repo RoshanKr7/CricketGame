@@ -20,7 +20,6 @@ public class BowlingScoreCardService implements IBowlingScoreCardService{
         PlayerDetails bowler = bowlingTeam.getPlayersDetails().get(currentBowler);
         bowlingScoreCard.setTeamId(teamId);
         bowlingScoreCard.setPlayerCode(currentBowler);
-        bowlingScoreCard.setPlayerName(bowler.getPlayerName());
         bowlingScoreCard.setNoOfBalls(0);
         bowlingScoreCard.setNoOfOvers(0);
         bowlingScoreCard.setRuns(0);
@@ -107,12 +106,10 @@ public class BowlingScoreCardService implements IBowlingScoreCardService{
     }
 
     public List<BowlingScoreCard> findBowlingScoreCardByMatchId(Integer matchId){
-        List<BowlingScoreCard> bowlingScoreCards = bowlingScoreCardRepository.findByMatchId(matchId);
-        return bowlingScoreCards;
+        return bowlingScoreCardRepository.findByMatchId(matchId);
     }
 
     public List<BowlingScoreCard> findBowlingScoreCardByMatchIdAndTeamId(Integer matchId, Integer teamId){
-        List<BowlingScoreCard> bowlingScoreCards = bowlingScoreCardRepository.findByMatchIdAndTeamId(matchId, teamId);
-        return bowlingScoreCards;
+        return bowlingScoreCardRepository.findByMatchIdAndTeamId(matchId, teamId);
     }
 }

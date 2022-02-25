@@ -30,11 +30,8 @@ public class CricketApplication implements ApplicationRunner {
     private MatchService matchService = new MatchService();
     private static Logger logger = Logger.getLogger(CricketApplication.class.getName());
     private static Scanner scanner = new Scanner(System.in);
-    //@Autowired
     private final IMatchSummaryRepository matchSummaryRepository;
-    //@Autowired
     private final IBattingScoreCardRepository battingScoreCardRepository;
-    //@Autowired
     private final IBowlingScoreCardRepository bowlingScoreCardRepository;
 
 	public static void main(String[] args) {
