@@ -1,6 +1,7 @@
 package com.tekion.cricket.service;
 
 import com.tekion.cricket.bean.PlayerDetails;
+import com.tekion.cricket.bean.PlayerType;
 import com.tekion.cricket.bean.TeamDetails;
 import com.tekion.cricket.util.Constants;
 
@@ -91,15 +92,15 @@ public class TeamService implements ITeamService{
         playerDetailsList.add(playerDetails);
     }
 
-    private PlayerDetails.PlayerType getPlayerType(){
+    private PlayerType getPlayerType(){
         String playerType;
         while (true) {
             playerType = scanner.next();
             if (playerType.equalsIgnoreCase("BAT")) {
-                return PlayerDetails.PlayerType.BAT;
+                return PlayerType.BAT;
             }
             else if(playerType.equalsIgnoreCase("BALL")){
-                return PlayerDetails.PlayerType.BALL;
+                return PlayerType.BALL;
             }
             logger.info("Please Enter correct Player type");
         }
@@ -119,12 +120,12 @@ public class TeamService implements ITeamService{
         }
     }
 
-    private PlayerDetails.PlayerType getPlayerTypeFromFile(String playerType){
+    private PlayerType getPlayerTypeFromFile(String playerType){
         if (playerType.equalsIgnoreCase("BAT")) {
-            return PlayerDetails.PlayerType.BAT;
+            return PlayerType.BAT;
         }
         else{
-            return PlayerDetails.PlayerType.BALL;
+            return PlayerType.BALL;
         }
     }
 }
